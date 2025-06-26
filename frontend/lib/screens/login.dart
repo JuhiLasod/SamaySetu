@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class login extends StatefulWidget{
   const login({super.key});
@@ -10,6 +12,36 @@ class _loginState extends State<login>
 {
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _passController=TextEditingController();
+  String msg='';
+  void _handleLogin () async{
+    final email=_emailController.text;
+    final pass=_passController.text;
+    try{
+    final res=await http.post(Uri.parse("http://10.0.2.2:8000/api/login"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'email': email,"pass": pass})
+    );
+    
+    if(res.statusCode==200)
+    {
+      setState(() {
+        msg="success";
+      });
+    }
+    else
+    {
+      setState(() {
+        msg='invalid cred';
+      });
+    }
+    }
+    catch(err)
+    {
+      setState(() {
+        msg="Error connecting to server. Try again later.";
+      });
+    }
+  }
   // final secreenHeight=MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context)
@@ -114,7 +146,7 @@ class _loginState extends State<login>
                             ),
                             backgroundColor: Color.fromARGB(255, 0, 0, 0)
                           ),
-                          onPressed: (){}, 
+                          onPressed: _handleLogin, 
                           child: Text('Sign in',
                             style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 255, 255, 255)),
                           )
@@ -135,7 +167,8 @@ class _loginState extends State<login>
                             style: TextStyle(decoration: TextDecoration.underline,fontSize: 15 ),
                             ),
                         ),
-                      )
+                      ),
+                      Text(msg),
                     ]
                   )
                   ]),
