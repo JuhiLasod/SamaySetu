@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import './screens/login.dart';
 void main()=>runApp( const samaySetu());
 
 class samaySetu extends StatelessWidget{
@@ -8,7 +8,7 @@ class samaySetu extends StatelessWidget{
   Widget build(BuildContext context)
   {
     return MaterialApp(
-      home:Text('samaysetu')
-    );
+      home:login()
+      );
   }
 }
