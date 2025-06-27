@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import './home.dart';
+
 
 class login extends StatefulWidget{
   const login({super.key});
@@ -13,9 +16,24 @@ class _loginState extends State<login>
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _passController=TextEditingController();
   String msg='';
+  String email='';
+  String pass='';
+  String token='';
+  bool visible=false;
+
+  void setVisible()
+  {
+    setState(() {
+      visible=!visible;
+    });
+  }
+
+  Future <void> saveToken(String token)async{
+    final prefs=await SharedPreferences.getInstance();
+    await prefs.setString("token",token);
+  }
+
   void _handleLogin () async{
-    final email=_emailController.text;
-    final pass=_passController.text;
     try{
     final res=await http.post(Uri.parse("http://10.0.2.2:8000/api/login"),
       headers: {"Content-Type": "application/json"},
@@ -25,13 +43,17 @@ class _loginState extends State<login>
     if(res.statusCode==200)
     {
       setState(() {
-        msg="success";
+        token=res.body;
       });
+      await saveToken(token);
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> home()));
     }
     else
     {
       setState(() {
-        msg='invalid cred';
+        msg='Invalid credentials';
+        _emailController.text='';
+        _passController.text='';
       });
     }
     }
@@ -86,7 +108,7 @@ class _loginState extends State<login>
               left: screenWidth *0.1,
               child: Container(
                 width: screenWidth * 0.8,
-                height: screenHeight * 0.4,
+                height: screenHeight * 0.5,
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(25)
@@ -99,19 +121,12 @@ class _loginState extends State<login>
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Padding(
-                        //   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                        //   child: Text('Email',style: 
-                        //     TextStyle(
-                        //       color: Color.fromARGB(255, 0, 0, 0),
-                        //       fontSize: 20
-                        //     ),
-                        //   )
-                        // ),
+                    
                         Padding(
                           padding: EdgeInsets.fromLTRB(0,0,0,20),
                           child: TextFormField(
                             controller: _emailController,
+                            onChanged: (value)=>{email=_emailController.text},
                             decoration: InputDecoration(
                               hintText: 'Enter your registered email id',
                               hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
@@ -124,9 +139,17 @@ class _loginState extends State<login>
                           padding: EdgeInsets.fromLTRB(0,0,0,20),
                           child: TextFormField(
                             controller: _passController,
+                            obscureText: !visible,
+                            onChanged: (value)=>{pass=_passController.text},
                             decoration: InputDecoration(
                               hintText: 'Enter password',
                               hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
+                              suffixIcon: IconButton(
+                                onPressed: setVisible,
+                                icon: Icon(
+                                  visible? Icons.visibility_off : Icons.visibility
+                                )
+                              ),
                               border: OutlineInputBorder(),
                               
                               ),
@@ -148,7 +171,7 @@ class _loginState extends State<login>
                           ),
                           onPressed: _handleLogin, 
                           child: Text('Sign in',
-                            style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 255, 255, 255)),
+                            style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 255, 255, 255)),
                           )
                         ),
                       ),
@@ -156,7 +179,7 @@ class _loginState extends State<login>
                         padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
                         child: GestureDetector(
                           child: Text('forgot password?',
-                            style: TextStyle(decoration: TextDecoration.underline,fontSize: 15 ),
+                            style: TextStyle(fontSize: 15 ),
                             ),
                         ),
                       ),
@@ -164,22 +187,20 @@ class _loginState extends State<login>
                         padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
                         child: GestureDetector(
                           child: Text('New to SamaySetu? Sign up now.',
-                            style: TextStyle(decoration: TextDecoration.underline,fontSize: 15 ),
+                            style: TextStyle(fontSize: 15 ),
                             ),
                         ),
                       ),
-                      Text(msg),
+                      Padding(
+                        padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
+                        child: Text(msg,
+                            style: TextStyle(color: Color.fromARGB(255, 255, 0, 0) , fontSize: 17 ),
+                            ),
+                      )
                     ]
                   )
                   ]),
-                  // Column(
-                  //   children: [
-                  //     ElevatedButton(
-                  //       onPressed: (){}, 
-                  //       child: Text('Sign in')
-                  //     )
-                  //   ]
-                  // )
+                  
                 ),
               )
           ),
