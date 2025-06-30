@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import './home.dart';
+import './otp.dart';
 
 
 class login extends StatefulWidget{
@@ -176,8 +177,9 @@ class _loginState extends State<login>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 20,0, 0),
                         child: GestureDetector(
+                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>otp()));},
                           child: Text('forgot password?',
                             style: TextStyle(fontSize: 15 ),
                             ),
