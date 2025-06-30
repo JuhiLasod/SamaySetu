@@ -1,26 +1,25 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import './home.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import './login.dart';
 import './otp.dart';
-import './signup.dart';
 
 
-class login extends StatefulWidget{
-  const login({super.key});
+class signup extends StatefulWidget{
+  const signup({super.key});
   @override
-  State <login> createState()=> _loginState(); 
+  State <signup> createState()=> _signupState(); 
 }
 
-class _loginState extends State<login>
+class _signupState extends State<signup>
 {
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _passController=TextEditingController();
   String msg='';
   String email='';
   String pass='';
-  String token='';
+  
   bool visible=false;
 
   void setVisible()
@@ -30,32 +29,39 @@ class _loginState extends State<login>
     });
   }
 
-  Future <void> saveToken(String token)async{
-    final prefs=await SharedPreferences.getInstance();
-    await prefs.setString("token",token);
-  }
+  
 
-  void _handleLogin () async{
+  void _handleSignup () async{
+    final email=_emailController.text;
+    final pass=_passController.text;
+    if( email.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(email))
+    {
+      setState(() {
+        msg="Invalid email id.";
+      });
+    }
+    else if(pass.isEmpty || pass.length<6 || !RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$&*~]).{6,}$').hasMatch(pass))
+    {
+      setState(() {
+        msg='Password must contain atleat one uppercase letter, one special character, one digit and should be longer than 6 characters';
+      });
+    }
+    else{
     try{
-    final res=await http.post(Uri.parse("http://10.0.2.2:8000/api/login"),
+    final res=await http.post(Uri.parse("http://10.0.2.2:8000/api/signup"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({'email': email,"pass": pass})
     );
     
     if(res.statusCode==200)
     {
-      setState(() {
-        token=res.body;
-      });
-      await saveToken(token);
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> home()));
+      msg=res.body;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg),duration: Duration(seconds: 3),behavior: SnackBarBehavior.floating,));
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> login()));
     }
-    else
-    {
+    else{
       setState(() {
-        msg='Invalid credentials';
-        _emailController.text='';
-        _passController.text='';
+        msg=res.body;
       });
     }
     }
@@ -65,8 +71,8 @@ class _loginState extends State<login>
         msg="Error connecting to server. Try again later.";
       });
     }
+    }
   }
-  // final secreenHeight=MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context)
   {
@@ -130,7 +136,7 @@ class _loginState extends State<login>
                             controller: _emailController,
                             onChanged: (value)=>{email=_emailController.text},
                             decoration: InputDecoration(
-                              hintText: 'Enter your registered email id',
+                              hintText: 'Enter your email id',
                               hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                               border: OutlineInputBorder(),
                               
@@ -171,30 +177,16 @@ class _loginState extends State<login>
                             ),
                             backgroundColor: Color.fromARGB(255, 0, 0, 0)
                           ),
-                          onPressed: _handleLogin, 
-                          child: Text('Sign in',
+                          onPressed:
+                            _handleSignup,
+                            
+                          
+                          child: Text('Sign up',
                             style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 255, 255, 255)),
                           )
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20,0, 0),
-                        child: GestureDetector(
-                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>otp()));},
-                          child: Text('forgot password?',
-                            style: TextStyle(fontSize: 15 ),
-                            ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
-                        child: GestureDetector(
-                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>signup()));},
-                          child: Text('New to SamaySetu? Sign up now.',
-                            style: TextStyle(fontSize: 15 ),
-                            ),
-                        ),
-                      ),
+                      
                       Padding(
                         padding: EdgeInsetsGeometry.fromLTRB(0, 20,0, 0),
                         child: Text(msg,
