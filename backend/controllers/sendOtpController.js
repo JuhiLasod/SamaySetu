@@ -43,7 +43,7 @@ const sendOtpController=async(req,res)=>{
         }
         catch(e)
         {
-            res.send("error sending mail");
+            res.status(500);
         }
     }
     else{
