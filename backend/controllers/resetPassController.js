@@ -6,7 +6,7 @@ const resetPassController=async(req,res)=>{
         const exist=await Users.findOne({email});
         exist.pass=pass;
         await exist.save();
-        res.send("pass reset successfull");
+        res.send("Password reset successfull");
     }
     catch(e)
     {

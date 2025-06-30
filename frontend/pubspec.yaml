@@ -78,6 +78,9 @@ flutter:
     - family: title
       fonts:
         - asset: assets/fonts/title.ttf
+    - family: basic
+      fonts:
+        - asset: assets/fonts/basic.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
