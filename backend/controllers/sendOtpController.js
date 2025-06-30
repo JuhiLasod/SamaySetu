@@ -22,7 +22,7 @@ const sendOtpController=async(req,res)=>{
             exist=new Otps({email,otp});
             await exist.save();
         }
-        res.send("otp saved successfully");
+        // res.send("otp saved successfully");
         const transporter=nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -39,7 +39,7 @@ const sendOtpController=async(req,res)=>{
         try{
             console.log("sending mail...");
             await transporter.sendMail(mailOptions);
-            
+            res.send("Otp successfully sent. This otp will expire after 3 minutes.")
         }
         catch(e)
         {
@@ -47,8 +47,8 @@ const sendOtpController=async(req,res)=>{
         }
     }
     else{
-        console.log("user do not exist in users list");
-        res.send("User do not exist");
+        console.log("user do not exist in users list"); 
+        res.send("User do not exist. Please enter valid email id.");
     }
     }
     catch(e)

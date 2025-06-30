@@ -10,10 +10,10 @@ const verifyOtpController=async(req,res)=>{
     if(exist)
     {
         console.log("the user and otp do exist");
-        res.send("success") 
+        res.send("Otp verified successfully.") 
     }
     else{
-        console.log("otp verification failed.try sending otp again");
+        console.log("Otp verification failed. Try sending otp again");
         res.send("failed");
     }
     }
