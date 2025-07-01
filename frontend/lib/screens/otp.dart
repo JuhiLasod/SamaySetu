@@ -117,7 +117,7 @@ class _otpState extends State<otp>
     return Scaffold(
       body: SingleChildScrollView(
                 child: Container(
-        color: Color.fromARGB(255, 217, 217, 217),
+        color: Color.fromARGB(255, 255, 255, 255),
         child: Column(
           children:[
               Container(

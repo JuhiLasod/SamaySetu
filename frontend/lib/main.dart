@@ -1,29 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import './screens/login.dart';
 import './screens/home.dart';
+import './screens/editProfile.dart';
 
-void main() => runApp(const SamaySetu());
+void main() {
+  runApp(SamaySetu());
+}
 
 class SamaySetu extends StatelessWidget {
   const SamaySetu({super.key});
-  
-  Future<String?> getToken() async {
+
+  Future<Widget> checkUserStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    final email = prefs.getString('email');
+
+    if (email == null) {
+      return login(); // Not logged in
+    }
+
+    try {
+      final res = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/isProfile'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+
+      if (res.statusCode == 500) {
+        return login(); // Server error
+      }
+
+      if (res.body == 'true') {
+        return home(); // Profile exists
+      } else {
+        return editProfile(); // Profile missing
+      }
+    } catch (e) {
+      return login(); // Network or parsing error
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FutureBuilder<String?>(
-        future: getToken(),
+      debugShowCheckedModeBanner: false,
+      home: FutureBuilder<Widget>(
+        future: checkUserStatus(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator()); // loading
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
           } else {
-            final token = snapshot.data;
-            return token == null ?  login() :  login();
+            return snapshot.data!;
           }
         },
       ),
