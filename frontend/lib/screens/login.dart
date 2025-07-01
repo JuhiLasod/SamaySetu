@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import './home.dart';
+// import './.dart';
 import './otp.dart';
 import './signup.dart';
 
@@ -33,6 +34,7 @@ class _loginState extends State<login>
   Future <void> saveToken(String token)async{
     final prefs=await SharedPreferences.getInstance();
     await prefs.setString("token",token);
+    await prefs.setString("email",email);
   }
 
   void _handleLogin () async{
@@ -48,7 +50,7 @@ class _loginState extends State<login>
         token=res.body;
       });
       await saveToken(token);
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> home()));
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> SamaySetu()));
     }
     else
     {
