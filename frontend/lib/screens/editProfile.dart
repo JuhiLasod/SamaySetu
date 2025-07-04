@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
-
+// import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class editProfile extends StatefulWidget
 {
   const editProfile({super.key});
@@ -10,6 +12,7 @@ class editProfile extends StatefulWidget
 }
 class _editProfileState extends State<editProfile>
 {
+
   final TextEditingController _namec=TextEditingController();
   final TextEditingController _bioc=TextEditingController();
   String? _selectedGender;
@@ -19,11 +22,49 @@ class _editProfileState extends State<editProfile>
   bool is12=false;
   bool is13=false;
   bool is14=false;
+
+  bool is2=false;
+  bool is21=false;
+  bool is22=false;
+  bool is23=false;
+  bool is24=false;
+
+  bool is3=false;
+  bool is31=false;
+  bool is32=false;
+  bool is33=false;
+  bool is34=false;
+
+  bool is4=false;
+  bool is41=false;
+  bool is42=false;
+  bool is43=false;
+  bool is44=false;
+
+  bool is5=false;
+  bool is51=false;
+  bool is52=false;
+  bool is53=false;
+  bool is54=false;
+
+  bool is6=false;
+  bool is61=false;
+  bool is62=false;
+  bool is63=false;
+  bool is64=false;
+
+  bool is7=false;
+  bool is71=false;
+  bool is72=false;
+  bool is73=false;
+  bool is74=false;
   List<String> myServices=[];
   // final TextEditingController _namec=TextEditingController();
   
   File? _profileImage;
   final ImagePicker _picker = ImagePicker(); 
+
+  String msg='';
 
   Future<void> _pickImage(ImageSource source) async {
   // 🔐 Ask for permission
@@ -42,6 +83,34 @@ class _editProfileState extends State<editProfile>
     });
   }
 }
+  void setProfile()async{
+    // print('sending');
+    final prefs=await SharedPreferences.getInstance();
+    final email=await prefs.getString('email');
+    // print(email);
+    String name=_namec.text;
+    String bio=_bioc.text;
+    String no=_noc.text;
+    // String _selectedGender.text;
+    final res= await http.post(Uri.parse('http://10.0.2.2:8000/profile/set-profile'),
+    headers:{'Content-Type':'application/json'},
+    body: jsonEncode({'email':email,'_profileImage':_profileImage,'name':name,'_selectedGender':_selectedGender,'bio':bio,'no':no,'myServices':myServices})
+    );
+    if(res.statusCode==500)
+    {
+      setState(() {
+        msg='profile set successfully';
+      });
+    }
+    else
+    {
+      setState(() {
+        msg='server error';
+      });
+    }
+    // print('sent');
+    // print
+  }
 
 
   @override
@@ -206,640 +275,1157 @@ class _editProfileState extends State<editProfile>
                   ),
 
 //education and learning
-                  GestureDetector(
-                    onTap: (){setState(() {
-                      is1=!is1;
-                    });},
-                    child: Container(
-                      height: is1? screenHeight * 0.5 : screenHeight * 0.15,
-                      width:  screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Color.fromARGB(255, 15, 111, 196),
-                        
-                      ),
-                      // BorderRadius(border: RoundedRectangleBorder(),)
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        Text('Education and Learning',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
-                        
-                        if(is1)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is1=!is1;
+                      });},
+                      child: Container(
+                        height: is1? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Education and Learning',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is1)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is11=!is11;
+                                        if(is11)
+                                        {
+                                          myServices.add('Tutoring');
+                                        }
+                                        if(!is11 && myServices.contains('Tutoring'))
+                                        {
+                                          myServices.remove('Tutoring');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is11? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Tutoring' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is11? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is1)
                           GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is11=!is11;
-                                      if(is11)
-                                      {
-                                        myServices.add('Tutoring');
-                                      }
-                                      if(!is11 && myServices.contains('Tutoring'))
-                                      {
-                                        myServices.remove('Tutoring');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is11? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Tutoring' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is11? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                                onTap: (){
+                                      setState(() {
+                                        is12=!is12;
+                                        if(is12)
+                                        {
+                                          myServices.add('Career Guidance');
+                                        }
+                                        if(!is12 && myServices.contains('Career Guidance'))
+                                        {
+                                          myServices.remove('Career Guidance');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is12? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Career Guidance' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is12? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-                        
-
-                        //service no 2
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is12=!is12;
-                                      if(is12)
-                                      {
-                                        myServices.add('Career Guidance');
-                                      }
-                                      if(!is12 && myServices.contains('Career Guidance'))
-                                      {
-                                        myServices.remove('Career Guidance');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is12? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Career Guidance' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is12? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                          //service no 3
+                          if(is1)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is13=!is13;
+                                        if(is13)
+                                        {
+                                          myServices.add('Teaching Digital Literacy');
+                                        }
+                                        if(!is13 && myServices.contains('Teaching Digital Literacy'))
+                                        {
+                                          myServices.remove('Teaching Digital Literacy');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is13? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Teaching Digital Literacy' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is13? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                        //service no 3
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is13=!is13;
-                                      if(is13)
-                                      {
-                                        myServices.add('Teaching Digital Literacy');
-                                      }
-                                      if(!is13 && myServices.contains('Teaching Digital Literacy'))
-                                      {
-                                        myServices.remove('Teaching Digital Literacy');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is13? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Teaching Digital Literacy' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is13? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                              //service 4
+                          if(is1)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is14=!is14;
+                                        if(is14)
+                                        {
+                                          myServices.add('Homework Help');
+                                        }
+                                        if(!is14 && myServices.contains('Homework Help'))
+                                        {
+                                          myServices.remove('Homework Help');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is14? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Homework Help' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is14? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                            //service 4
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is14=!is14;
-                                      if(is14)
-                                      {
-                                        myServices.add('Homework Help');
-                                      }
-                                      if(!is14 && myServices.contains('Homework Help'))
-                                      {
-                                        myServices.remove('Homework Help');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is14? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Homework Help' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is14? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
-                              ),
-                            ),
-                      ],)
+                        ],)
+                      ),
                     ),
                   ),
 
 //health and wellness
-                  GestureDetector(
-                    onTap: (){setState(() {
-                      is1=!is1;
-                    });},
-                    child: Container(
-                      height: is1? screenHeight * 0.5 : screenHeight * 0.15,
-                      width:  screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Color.fromARGB(255, 15, 111, 196),
-                        
-                      ),
-                      // BorderRadius(border: RoundedRectangleBorder(),)
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        Text('Education and Learning',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
-                        
-                        if(is1)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is2=!is2;
+                      });},
+                      child: Container(
+                        height: is2? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Health and Wellness',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is2)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is21=!is21;
+                                        if(is21)
+                                        {
+                                          myServices.add('Mental Health Support');
+                                        }
+                                        if(!is21 && myServices.contains('Mental Health Support'))
+                                        {
+                                          myServices.remove('Mental Health Support');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is21? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Mental Health Support' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is21? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is2)
                           GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is11=!is11;
-                                      if(is11)
-                                      {
-                                        myServices.add('Tutoring');
-                                      }
-                                      if(!is11 && myServices.contains('Tutoring'))
-                                      {
-                                        myServices.remove('Tutoring');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is11? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Tutoring' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is11? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                                onTap: (){
+                                      setState(() {
+                                        is22=!is22;
+                                        if(is22)
+                                        {
+                                          myServices.add('Yoga or Fitness');
+                                        }
+                                        if(!is22 && myServices.contains('Yoga or Fitness'))
+                                        {
+                                          myServices.remove('Yoga or Fitness');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is22? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Yoga or Fitness' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is22? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-                        
-
-                        //service no 2
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is12=!is12;
-                                      if(is12)
-                                      {
-                                        myServices.add('Career Guidance');
-                                      }
-                                      if(!is12 && myServices.contains('Career Guidance'))
-                                      {
-                                        myServices.remove('Career Guidance');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is12? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Career Guidance' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is12? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                          //service no 3
+                          if(is2)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is23=!is23;
+                                        if(is23)
+                                        {
+                                          myServices.add('Nutrition Guidance');
+                                        }
+                                        if(!is23 && myServices.contains('Nutrition Guidance'))
+                                        {
+                                          myServices.remove('Nutrition Guidance');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is23? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Nutrition Guidance' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is23? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                        //service no 3
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is13=!is13;
-                                      if(is13)
-                                      {
-                                        myServices.add('Teaching Digital Literacy');
-                                      }
-                                      if(!is13 && myServices.contains('Teaching Digital Literacy'))
-                                      {
-                                        myServices.remove('Teaching Digital Literacy');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is13? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Teaching Digital Literacy' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is13? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                              //service 4
+                          if(is2)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is24=!is24;
+                                        if(is24)
+                                        {
+                                          myServices.add('Basic First Aid Knowledge');
+                                        }
+                                        if(!is24 && myServices.contains('Basic First Aid Knowledge'))
+                                        {
+                                          myServices.remove('Basic First Aid Knowledge');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is24? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Basic First Aid Knowledge' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is24? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                            //service 4
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is14=!is14;
-                                      if(is14)
-                                      {
-                                        myServices.add('Homework Help');
-                                      }
-                                      if(!is14 && myServices.contains('Homework Help'))
-                                      {
-                                        myServices.remove('Homework Help');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is14? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Homework Help' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is14? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
-                              ),
-                            ),
-                      ],)
+                        ],)
+                      ),
                     ),
                   ),
 
-
-                  GestureDetector(
-                    onTap: (){setState(() {
-                      is1=!is1;
-                    });},
-                    child: Container(
-                      height: is1? screenHeight * 0.5 : screenHeight * 0.15,
-                      width:  screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Color.fromARGB(255, 15, 111, 196),
-                        
-                      ),
-                      // BorderRadius(border: RoundedRectangleBorder(),)
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        Text('Education and Learning',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
-                        
-                        if(is1)
+//technical help
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is3=!is3;
+                      });},
+                      child: Container(
+                        height: is3? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Technical Help',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is3)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is31=!is31;
+                                        if(is31)
+                                        {
+                                          myServices.add('App/Website Development');
+                                        }
+                                        if(!is31 && myServices.contains('App/Website Development'))
+                                        {
+                                          myServices.remove('App/Website Development');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is31? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('App/Website Development' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is31? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is3)
                           GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is11=!is11;
-                                      if(is11)
-                                      {
-                                        myServices.add('Tutoring');
-                                      }
-                                      if(!is11 && myServices.contains('Tutoring'))
-                                      {
-                                        myServices.remove('Tutoring');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is11? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Tutoring' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is11? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                                onTap: (){
+                                      setState(() {
+                                        is32=!is32;
+                                        if(is32)
+                                        {
+                                          myServices.add('Mobile Phone/Computer Troubleshooting');
+                                        }
+                                        if(!is32 && myServices.contains('Mobile Phone/Computer Troubleshooting'))
+                                        {
+                                          myServices.remove('Mobile Phone/Computer Troubleshooting');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is32? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Career Guidance' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is32? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-                        
-
-                        //service no 2
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is12=!is12;
-                                      if(is12)
-                                      {
-                                        myServices.add('Career Guidance');
-                                      }
-                                      if(!is12 && myServices.contains('Career Guidance'))
-                                      {
-                                        myServices.remove('Career Guidance');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is12? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Career Guidance' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is12? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                          //service no 3
+                          if(is3)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is33=!is33;
+                                        if(is33)
+                                        {
+                                          myServices.add('Setting Up Devices For Elders');
+                                        }
+                                        if(!is33 && myServices.contains('Setting Up Devices For Elders'))
+                                        {
+                                          myServices.remove('Setting Up Devices For Elders');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is33? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Setting Up Devices For Elders' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is33? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                        //service no 3
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is13=!is13;
-                                      if(is13)
-                                      {
-                                        myServices.add('Teaching Digital Literacy');
-                                      }
-                                      if(!is13 && myServices.contains('Teaching Digital Literacy'))
-                                      {
-                                        myServices.remove('Teaching Digital Literacy');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is13? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Teaching Digital Literacy' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is13? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                              //service 4
+                          if(is3)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is34=!is34;
+                                        if(is34)
+                                        {
+                                          myServices.add('Graphic Design/ UI Help');
+                                        }
+                                        if(!is34 && myServices.contains('Graphic Design/ UI Help'))
+                                        {
+                                          myServices.remove('Graphic Design/ UI Help');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is34? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Graphic Design/ UI Help' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is34? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                            //service 4
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is14=!is14;
-                                      if(is14)
-                                      {
-                                        myServices.add('Homework Help');
-                                      }
-                                      if(!is14 && myServices.contains('Homework Help'))
-                                      {
-                                        myServices.remove('Homework Help');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is14? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Homework Help' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is14? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
-                              ),
-                            ),
-                      ],)
+                        ],)
+                      ),
                     ),
                   ),
 
-
-                  GestureDetector(
-                    onTap: (){setState(() {
-                      is1=!is1;
-                    });},
-                    child: Container(
-                      height: is1? screenHeight * 0.5 : screenHeight * 0.15,
-                      width:  screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Color.fromARGB(255, 15, 111, 196),
-                        
-                      ),
-                      // BorderRadius(border: RoundedRectangleBorder(),)
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        Text('Education and Learning',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
-                        
-                        if(is1)
+//elder support
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is4=!is4;
+                      });},
+                      child: Container(
+                        height: is4? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Elder Support',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is4)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is41=!is41;
+                                        if(is41)
+                                        {
+                                          myServices.add('Reading To Elderly');
+                                        }
+                                        if(!is41 && myServices.contains('Reading To Elderly'))
+                                        {
+                                          myServices.remove('Reading To Elderly');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is41? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Reading To Elderly' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is41? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is4)
                           GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is11=!is11;
-                                      if(is11)
-                                      {
-                                        myServices.add('Tutoring');
-                                      }
-                                      if(!is11 && myServices.contains('Tutoring'))
-                                      {
-                                        myServices.remove('Tutoring');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is11? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Tutoring' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is11? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                                onTap: (){
+                                      setState(() {
+                                        is42=!is42;
+                                        if(is42)
+                                        {
+                                          myServices.add('Grocery Ordering Help');
+                                        }
+                                        if(!is42 && myServices.contains('Grocery Ordering Help'))
+                                        {
+                                          myServices.remove('Grocery Ordering Help');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is42? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Grocery Ordering Help' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is42? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-                        
-
-                        //service no 2
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is12=!is12;
-                                      if(is12)
-                                      {
-                                        myServices.add('Career Guidance');
-                                      }
-                                      if(!is12 && myServices.contains('Career Guidance'))
-                                      {
-                                        myServices.remove('Career Guidance');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is12? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Career Guidance' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is12? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                          //service no 3
+                          if(is4)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is43=!is43;
+                                        if(is43)
+                                        {
+                                          myServices.add('Making Calls/Check-Ins');
+                                        }
+                                        if(!is43 && myServices.contains('Making Calls/Check-Ins'))
+                                        {
+                                          myServices.remove('Making Calls/Check-Ins');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is43? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Making Calls/Check-Ins' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is43? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                        //service no 3
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is13=!is13;
-                                      if(is13)
-                                      {
-                                        myServices.add('Teaching Digital Literacy');
-                                      }
-                                      if(!is13 && myServices.contains('Teaching Digital Literacy'))
-                                      {
-                                        myServices.remove('Teaching Digital Literacy');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is13? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Teaching Digital Literacy' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is13? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
+                    
+                              //service 4
+                          if(is4)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is44=!is44;
+                                        if(is44)
+                                        {
+                                          myServices.add('Teaching Phone Apps');
+                                        }
+                                        if(!is44 && myServices.contains('Teaching Phone Apps'))
+                                        {
+                                          myServices.remove('Teaching Phone Apps');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is44? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Teaching Phone Apps' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is44? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
                               ),
-                            ),
-
-                            //service 4
-                        if(is1)
-                        GestureDetector(
-                              onTap: (){
-                                    setState(() {
-                                      is14=!is14;
-                                      if(is14)
-                                      {
-                                        myServices.add('Homework Help');
-                                      }
-                                      if(!is14 && myServices.contains('Homework Help'))
-                                      {
-                                        myServices.remove('Homework Help');
-                                      }
-                                    });
-                                  },
-                             
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Container(
-                                  alignment: Alignment.center,
-                              decoration:  BoxDecoration(color: is14? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.7,
-                                  child: Text('Homework Help' ,style: TextStyle(
-                                    fontFamily: 'basic',
-                                    fontSize: 20,
-                                    
-                                    color: is14? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
-                                  ),)
-                                )
-                              ),
-                            ),
-                      ],)
+                    
+                    
+                        ],)
+                      ),
                     ),
-                  )
+                  ),
+
+//Communication
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is5=!is5;
+                      });},
+                      child: Container(
+                        height: is5? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Communication',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is5)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is51=!is51;
+                                        if(is51)
+                                        {
+                                          myServices.add('Translation');
+                                        }
+                                        if(!is51 && myServices.contains('Translation'))
+                                        {
+                                          myServices.remove('Translation');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is51? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Translation' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is51? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is5)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is52=!is52;
+                                        if(is52)
+                                        {
+                                          myServices.add('Resume Writing/SOP Help');
+                                        }
+                                        if(!is52 && myServices.contains('Resume Writing/SOP Help'))
+                                        {
+                                          myServices.remove('Resume Writing/SOP Help');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is52? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Resume Writing/SOP Help' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is52? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                          //service no 3
+                          if(is5)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is53=!is53;
+                                        if(is53)
+                                        {
+                                          myServices.add('Public Speaking Practice');
+                                        }
+                                        if(!is53 && myServices.contains('Public Speaking Practice'))
+                                        {
+                                          myServices.remove('Public Speaking Practice');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is53? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Public Speaking Practice' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is53? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              //service 4
+                          if(is5)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is54=!is54;
+                                        if(is54)
+                                        {
+                                          myServices.add('Language Conversation Partner');
+                                        }
+                                        if(!is54 && myServices.contains('Language Conversation Partner'))
+                                        {
+                                          myServices.remove('Language Conversation Partner');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is54? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Language Conversation Partner' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is54? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              
+                        ],)
+                      ),
+                    ),
+                  ),
+
+//creative services
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is6=!is6;
+                      });},
+                      child: Container(
+                        height: is6? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Creative Services',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is6)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is61=!is61;
+                                        if(is61)
+                                        {
+                                          myServices.add('Art and Craft Sessions');
+                                        }
+                                        if(!is61 && myServices.contains('Art and Craft Sessions'))
+                                        {
+                                          myServices.remove('Art and Craft Sessions');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is61? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Art and Craft Sessions' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is61? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is6)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is62=!is62;
+                                        if(is62)
+                                        {
+                                          myServices.add('Photography');
+                                        }
+                                        if(!is62 && myServices.contains('Photography'))
+                                        {
+                                          myServices.remove('Photography');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is62? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Photography' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is62? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                          //service no 3
+                          if(is6)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is63=!is63;
+                                        if(is63)
+                                        {
+                                          myServices.add('Music');
+                                        }
+                                        if(!is63 && myServices.contains('Music'))
+                                        {
+                                          myServices.remove('Music');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is63? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Music' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is63? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              //service 4
+                          if(is6)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is64=!is64;
+                                        if(is64)
+                                        {
+                                          myServices.add('Knitting');
+                                        }
+                                        if(!is64 && myServices.contains('Knitting'))
+                                        {
+                                          myServices.remove('Knitting');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is64? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Knitting' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is64? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              
+                        ],)
+                      ),
+                    ),
+                  ),
+
+//community sertvices
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,screenHeight * 0.02,0,screenHeight * 0.02),
+                    child: GestureDetector(
+                      onTap: (){setState(() {
+                        is7=!is7;
+                      });},
+                      child: Container(
+                        height: is7? screenHeight * 0.5 : screenHeight * 0.15,
+                        width:  screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 15, 111, 196),
+                          
+                        ),
+                        // BorderRadius(border: RoundedRectangleBorder(),)
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text('Community Services',style: TextStyle(fontFamily: 'title',fontWeight: FontWeight.bold ,fontSize: 35),),
+                          
+                          if(is7)
+                            GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is71=!is71;
+                                        if(is71)
+                                        {
+                                          myServices.add('Event Organising');
+                                        }
+                                        if(!is71 && myServices.contains('Event Organising'))
+                                        {
+                                          myServices.remove('Event Organising');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is71? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Event Organising' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is71? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                          
+                    
+                          //service no 2
+                          if(is7)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is72=!is72;
+                                        if(is72)
+                                        {
+                                          myServices.add('Crowd Management Volunteering');
+                                        }
+                                        if(!is72 && myServices.contains('Crowd Management Volunteering'))
+                                        {
+                                          myServices.remove('Crowd Management Volunteering');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is72? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Crowd Management Volunteering' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is72? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                          //service no 3
+                          if(is7)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is73=!is73;
+                                        if(is73)
+                                        {
+                                          myServices.add('Waste Segregation Training');
+                                        }
+                                        if(!is73 && myServices.contains('Waste Segregation Training'))
+                                        {
+                                          myServices.remove('Waste Segregation Training');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is73? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Waste Segregation Training' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is73? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              //service 4
+                          if(is7)
+                          GestureDetector(
+                                onTap: (){
+                                      setState(() {
+                                        is74=!is74;
+                                        if(is74)
+                                        {
+                                          myServices.add('Awareness Campaign');
+                                        }
+                                        if(!is74 && myServices.contains('Awareness Campaign'))
+                                        {
+                                          myServices.remove('Awareness Campaign');
+                                        }
+                                      });
+                                    },
+                               
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                decoration:  BoxDecoration(color: is74? Color.fromARGB(255, 1, 54, 98) : Color.fromARGB(255, 67, 153, 227) ,borderRadius: BorderRadius.circular(20)),
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.7,
+                                    child: Text('Awareness Campaign' ,style: TextStyle(
+                                      fontFamily: 'basic',
+                                      fontSize: 20,
+                                      
+                                      color: is74? Color.fromARGB(255, 15, 111, 196) :Color.fromARGB(255, 0, 0, 0)
+                                    ),)
+                                  )
+                                ),
+                              ),
+                    
+                              
+                        ],)
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: ElevatedButton(
+                      onPressed: setProfile, 
+                      child: Text('Done')
+                      ),
+                  ),
+
+                  Text(msg)
+
                 ]),
               ),
             )

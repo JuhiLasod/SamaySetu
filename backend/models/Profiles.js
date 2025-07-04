@@ -7,7 +7,7 @@ const ProfilesSchema=new mongoose.Schema({
     bio: {type: String},
     balance: {type: Number},
     myskills: {type: [String]},
-    servicesUsed: {type: [String]},
+    // servicesUsed: {type: [String]},
     history: [ {service: String , amount: Number} ],
     dp: { data: Buffer , contentType: String}
 });
