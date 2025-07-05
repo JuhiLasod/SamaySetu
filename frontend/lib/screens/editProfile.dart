@@ -2,6 +2,7 @@ import 'dart:io';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,17 +68,10 @@ class _editProfileState extends State<editProfile>
   String msg='';
 
   Future<void> _pickImage(ImageSource source) async {
-  // 🔐 Ask for permission
-  // if (source == ImageSource.camera) {
-  //   await Permission.camera.request();
-  // } else {
-  //   await Permission.photos.request(); // or Permission.storage for older versions
-  // }
+  
+    final pickedFile = await _picker.pickImage(source: source);
 
-  // 📸 Pick the image
-  final pickedFile = await _picker.pickImage(source: source);
-
-  if (pickedFile != null) {
+    if (pickedFile != null) {
     setState(() {
       _profileImage = File(pickedFile.path);
     });
@@ -92,10 +86,25 @@ class _editProfileState extends State<editProfile>
     String bio=_bioc.text;
     String no=_noc.text;
     // String _selectedGender.text;
-    final res= await http.post(Uri.parse('http://10.0.2.2:8000/profile/set-profile'),
-    headers:{'Content-Type':'application/json'},
-    body: jsonEncode({'email':email,'_profileImage':_profileImage,'name':name,'_selectedGender':_selectedGender,'bio':bio,'no':no,'myServices':myServices})
-    );
+    var uri= Uri.parse('http://10.0.2.2:8000/profile/set-profile');
+    var req=http.MultipartRequest('POST',uri);
+    req.fields['email']=email !;
+    // req.fields['_profileImage']= _profileImage;
+    req.fields['name'] =name;
+    req.fields['no'] =no;
+    req.fields['_selectedGender']= _selectedGender !;
+    req.fields['bio'] =bio;
+    req.fields['myServices'] =jsonEncode(myServices);
+    if(_profileImage !=null)
+    {
+      var stream= http.ByteStream(_profileImage! .openRead());
+      var length=await _profileImage! .length();
+      var multiPartFile=http.MultipartFile('dp', stream, length, filename: basename(_profileImage! .path));
+
+      req.files.add(multiPartFile);
+
+    }
+    var res=await req.send();
     if(res.statusCode==500)
     {
       setState(() {
@@ -174,7 +183,7 @@ class _editProfileState extends State<editProfile>
   onTap: () {
     showModalBottomSheet(
       context: context,
-      builder: (_) => _bottomSheet(),
+      builder: (ctx) => _bottomSheet(ctx),
     );
   },
   child: CircleAvatar(
@@ -1434,7 +1443,7 @@ class _editProfileState extends State<editProfile>
         
   
   }
-  Widget _bottomSheet() {
+  Widget _bottomSheet(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       height: 150,
