@@ -57,7 +57,22 @@ class _homeState extends State<home>
   {
     
     return Scaffold(
-      body: Padding( padding: EdgeInsets.all(50),child: ElevatedButton(onPressed: handleLogout, child: Text('logout')))
+      body: Column(
+        children: [
+          Padding( 
+            padding: EdgeInsets.all(50),
+            child: ElevatedButton(
+              onPressed: handleLogout, 
+              child: Text('logout')
+            )
+          ),
+
+          ElevatedButton(
+            onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));}, 
+            child: Text('edit profile')
+          )
+        ]
+      )
     );
   }
 }

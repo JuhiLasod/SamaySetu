@@ -4,8 +4,18 @@ const editProfileController=async(req,res)=>{
     // console.log('yay');
     const {email,_profileImage,name,_selectedGender,bio,no}=req.body;
     const myServices = JSON.parse(req.body.myServices);
-    // console.log('ok');
-    // console.log(email,_profileImage,name,_selectedGender,bio,no,myServices);
+
+    const exist= await Profiles.findOne({email});
+    if(exist)
+    {
+        exist.name=name;
+        exist.no=no;
+        exist.bio=bio;
+        exist.gender=_selectedGender;
+        exist.myskills=myServices;
+        await exist.save();
+        return res.sendStatus(200);
+    }
     const done= await new Profiles({
         email,
         name,

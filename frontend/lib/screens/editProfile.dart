@@ -67,7 +67,8 @@ class _editProfileState extends State<editProfile>
   final ImagePicker _picker = ImagePicker(); 
 
   String msg='';
-
+  String name='';
+  String bio='';
   Future<void> _pickImage(ImageSource source) async {
   
     final pickedFile = await _picker.pickImage(source: source);
@@ -78,11 +79,240 @@ class _editProfileState extends State<editProfile>
     });
   }
 }
+void loadContent()async{
+  final prefs=await SharedPreferences.getInstance();
+  final email=await prefs.getString('email');
+  final res= await http.post(Uri.parse("http://10.0.2.2:8000/profile/loadprofile"),
+  headers:{'Content-Type':'application/json'},
+  body:jsonEncode({'email':email})
+  );
+  final data=jsonDecode( res.body);
+  setState(() {
+    // name=data['name'];
+    _namec.text=data['name'];
+    _selectedGender=data['gender'];
+    _bioc.text= data['bio'];
+    _noc.text=data['no'];
+    // myServices=data['myServices'];
+    if(data['myServices'].contains('Tutoring'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is11=true;
+      });
+    }
+    if(data['myServices'].contains('Career Guidance'))
+    {
+      myServices.add('Career Guidance');
+      setState(() {
+        is12=true;
+      });
+    }
+    if(data['myServices'].contains('Teaching Digital Literacy'))
+    {
+      myServices.add('Teaching Digital Literacy');
+      setState(() {
+        is13=true;
+      });
+    }
+    if(data['myServices'].contains('Homework Help'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is14=true;
+      });
+    }
+    //for secnd service
+    if(data['myServices'].contains('Mental Health Support'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is21=true;
+      });
+    }
+    if(data['myServices'].contains('Yoga or Fitness'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is22=true;
+      });
+    }
+    if(data['myServices'].contains('Nutrition Guidance'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is23=true;
+      });
+    }
+
+    if(data['myServices'].contains('Basic First Aid Knowledge'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is24=true;
+      });
+    }
+
+    //for third service
+    if(data['myServices'].contains('App/Website Development'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is31=true;
+      });
+    }
+    if(data['myServices'].contains('Career Guidance'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is32=true;
+      });
+    }
+    if(data['myServices'].contains('Setting Up Devices For Elders'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is33=true;
+      });
+    }
+    if(data['myServices'].contains('Graphic Design/ UI Help'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is34=true;
+      });
+    }
+
+    //forth service
+    if(data['myServices'].contains('Reading To Elderly'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is41=true;
+      });
+    }
+    if(data['myServices'].contains('Grocery Ordering Help'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is42=true;
+      });
+    }
+    if(data['myServices'].contains('Making Calls/Check-Ins'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is43=true;
+      });
+    }
+    if(data['myServices'].contains('Teaching Phone Apps'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is44=true;
+      });
+    }
+
+    //fifth service
+    if(data['myServices'].contains('Translation'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is51=true;
+      });
+    }
+    if(data['myServices'].contains('Resume Writing/SOP Help'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is52=true;
+      });
+    }
+    if(data['myServices'].contains('Public Speaking Practice'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is53=true;
+      });
+    }
+    if(data['myServices'].contains('Language Conversation Partner'))
+    {
+      myServices.add('Tutoring');
+      setState(() {
+        is54=true;
+      });
+    }
+
+    //sixth service
+    if(data['myServices'].contains('Art and Craft Sessions'))
+    {
+      myServices.add('Art and Craft Sessions');
+      setState(() {
+        is61=true;
+      });
+    }
+    if(data['myServices'].contains('Photography'))
+    {
+      myServices.add('Photography');
+      setState(() {
+        is62=true;
+      });
+    }
+    if(data['myServices'].contains('Music'))
+    {
+      myServices.add('Music');
+      setState(() {
+        is63=true;
+      });
+    }
+    if(data['myServices'].contains('Knitting'))
+    {
+      myServices.add('Knitting');
+      setState(() {
+        is64=true;
+      });
+    }
+
+    //seventh service
+    if(data['myServices'].contains('Event Organising'))
+    {
+      myServices.add('Event Organising');
+      setState(() {
+        is71 =true;
+      });
+    }
+    if(data['myServices'].contains('Crowd Management Volunteering'))
+    {
+      myServices.add('Crowd Management Volunteering');
+      setState(() {
+        is72=true;
+      });
+    }
+    if(data['myServices'].contains('Waste Segregation Training'))
+    {
+      myServices.add('Waste Segregation Traning');
+      setState(() {
+        is73=true;
+      });
+    }
+    if(data['myServices'].contains('Awareness Campaign'))
+    {
+      myServices.add('Awareness Campaign');
+      setState(() {
+        is74=true;
+      });
+    }
+
+
+    
+  });
+ 
+}
   void setProfile(BuildContext context)async{
-    // print('sending');
+   
     final prefs=await SharedPreferences.getInstance();
     final email=await prefs.getString('email');
-    // print(email);
+   
     String name=_namec.text;
     String bio=_bioc.text;
     String no=_noc.text;
@@ -95,15 +325,15 @@ class _editProfileState extends State<editProfile>
       return;
     }
     else{
-    // String _selectedGender.text;
     var uri= Uri.parse('http://10.0.2.2:8000/profile/set-profile');
     var req=http.MultipartRequest('POST',uri);
     req.fields['email']=email !;
-    // req.fields['_profileImage']= _profileImage;
+   
     req.fields['name'] =name;
     req.fields['no'] =no;
     req.fields['_selectedGender']= _selectedGender !;
     req.fields['bio'] =bio;
+    
     req.fields['myServices'] =jsonEncode(myServices);
     if(_profileImage !=null)
     {
@@ -133,14 +363,18 @@ class _editProfileState extends State<editProfile>
         msg='server error';
       });
     }
-    // print('sent');
-    // print
   }
   }
-
+  @override
+  void initState(){
+    super.initState();
+      print('yes coming inside init');
+      loadContent();
+    }
   @override
   Widget build(BuildContext context)
   {
+    
     final screenHeight=MediaQuery.of(context).size.height ;
     final screenWidth=MediaQuery.of(context).size.width ;
     return Scaffold(
