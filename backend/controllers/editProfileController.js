@@ -22,18 +22,12 @@ const editProfileController=async(req,res)=>{
             }:undefined
         });
     await done.save();
-    if(done)
-    {
-        return res.status(200);
-    }
-    else
-    {
-        return res.status(500);
-    }
+    return res.sendStatus(200);
+    
     }
     catch(e)
     {
-        return res.status(500);
+        return res.sendStatus(500);
     }
 }
 export default editProfileController;

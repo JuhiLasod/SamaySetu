@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './home.dart';
 class editProfile extends StatefulWidget
 {
   const editProfile({super.key});
@@ -77,7 +78,7 @@ class _editProfileState extends State<editProfile>
     });
   }
 }
-  void setProfile()async{
+  void setProfile(BuildContext context)async{
     // print('sending');
     final prefs=await SharedPreferences.getInstance();
     final email=await prefs.getString('email');
@@ -85,6 +86,15 @@ class _editProfileState extends State<editProfile>
     String name=_namec.text;
     String bio=_bioc.text;
     String no=_noc.text;
+    if(name=='' || bio=='' || no=='' || _selectedGender=='' || myServices==[])
+    {
+      print('somthng is empty');
+      setState(() {
+        msg='fill the entries properly';
+      });
+      return;
+    }
+    else{
     // String _selectedGender.text;
     var uri= Uri.parse('http://10.0.2.2:8000/profile/set-profile');
     var req=http.MultipartRequest('POST',uri);
@@ -105,11 +115,17 @@ class _editProfileState extends State<editProfile>
 
     }
     var res=await req.send();
-    if(res.statusCode==500)
+    if(res.statusCode!=500)
     {
-      setState(() {
-        msg='profile set successfully';
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Profile set successfully!'),
+      backgroundColor: Colors.green,
+    ),
+    
+  );
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> home()));
+      
     }
     else
     {
@@ -120,7 +136,7 @@ class _editProfileState extends State<editProfile>
     // print('sent');
     // print
   }
-
+  }
 
   @override
   Widget build(BuildContext context)
@@ -1425,15 +1441,21 @@ class _editProfileState extends State<editProfile>
                     ),
                   ),
 
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: ElevatedButton(
-                      onPressed: setProfile, 
-                      child: Text('Done')
-                      ),
-                  ),
-
-                  Text(msg)
+                  ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            backgroundColor: Color.fromARGB(255, 15, 111, 196)
+                          ),
+                          onPressed: ()=> setProfile(context), 
+                          child: Text('Done',
+                            style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 255, 255, 255)),
+                          )
+                        ),
+                        // if(msg=='success')
+                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: content));
+                  Padding(padding:EdgeInsets.all(screenHeight * 0.02) ,child: Text(msg, style: TextStyle(fontFamily: 'basic', fontSize: 20 , color: Color.fromARGB(255, 255, 0, 0))))
 
                 ]),
               ),

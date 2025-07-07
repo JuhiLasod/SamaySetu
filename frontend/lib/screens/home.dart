@@ -21,7 +21,8 @@ class _homeState extends State<home>
   void isProfile()async{
     final prefs=await SharedPreferences.getInstance();
     final email=await  prefs.getString('email');
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/api/isProfile'),
+    print(email);
+    final res=await http.post(Uri.parse('http://10.0.2.2:8000/profile/isprofile'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email':email})
     );
@@ -43,9 +44,11 @@ class _homeState extends State<home>
   void initState()
   {
     super.initState();
+    print("inside init");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       isProfile();
     });
+
     // if(!existProfile){
     //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>editProfile()));
     // }

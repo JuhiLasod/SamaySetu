@@ -17,29 +17,31 @@ class SamaySetu extends StatelessWidget {
   Future<Widget> checkUserStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email');
+    print(email);
 
     if (email == null) {
-      return login(); // Not logged in
+      return login(); 
     }
 
     try {
+      print("inside try");
       final res = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/isProfile'),
+        Uri.parse('http://10.0.2.2:8000/profile/isprofile'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
-
+      print(res.body);
       if (res.statusCode == 500) {
-        return login(); // Server error
+        return login(); 
       }
 
-      if (res.body == 'true') {
-        return home(); // Profile exists
+      if (await res.body == 'true') {
+        return home(); 
       } else {
-        return editProfile(); // Profile missing
+        return editProfile(); 
       }
     } catch (e) {
-      return login(); // Network or parsing error
+      return login(); 
     }
   }
 
