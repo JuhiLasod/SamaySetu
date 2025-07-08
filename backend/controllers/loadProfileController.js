@@ -8,12 +8,15 @@ const loadProfileController=async(req,res)=>{
     {
         console.log("email exists");
         const user=await Profiles.findOne({email});
-        return res.json({name: user.name, no: user.no, bio: user.bio, gender: user.gender,myServices: user.myskills});
+        const dpBase64 = user.dp?.data
+        ? `data:${user.dp.contentType};base64,${user.dp.data.toString('base64')}`
+        : null;
+        return res.json({name: user.name, no: user.no, bio: user.bio, gender: user.gender,myServices: user.myskills, dp: dpBase64});
 
     }
     else{
         console.log("not exists");
-        return res.json({name: null, no: null, bio: null, gender: null});
+        return res.json({name: null, no: null, bio: null, gender: null, dp: null});
     }
     return res.send();
 }catch(e)

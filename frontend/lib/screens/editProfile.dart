@@ -2,6 +2,8 @@ import 'dart:io';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+// import '.../assets/images/logo.png';
+// import 'D:\JUHI\SamaySetu\frontend\assets\images\logo.png'
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,6 +71,7 @@ class _editProfileState extends State<editProfile>
   String msg='';
   String name='';
   String bio='';
+  String? dpBase64;
   Future<void> _pickImage(ImageSource source) async {
   
     final pickedFile = await _picker.pickImage(source: source);
@@ -93,6 +96,7 @@ void loadContent()async{
     _selectedGender=data['gender'];
     _bioc.text= data['bio'];
     _noc.text=data['no'];
+    dpBase64=data['dp'];
     // myServices=data['myServices'];
     if(data['myServices'].contains('Tutoring'))
     {
@@ -384,11 +388,12 @@ void loadContent()async{
             Container(
               color: Color.fromARGB(255, 0, 0, 0),
               height: screenHeight * 0.12,
+              // width: screenWidth,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: Row(
                   children: [
-                    Image.asset("assets/images/logo.png",fit: BoxFit.cover,height: screenHeight * 0.07,),
+                    Image.asset('assets/images/logo.png',fit: BoxFit.contain, ),
                     Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0),child: Text("SamaySetu",style: TextStyle(fontFamily: 'title',fontSize:42, color: Color.fromARGB(255, 255, 255, 255)),))
                   ],
                 ),
@@ -437,15 +442,18 @@ void loadContent()async{
     );
   },
   child: CircleAvatar(
-    radius: 60,
-    backgroundImage: _profileImage != null
-        ? FileImage(_profileImage!)
-        : const AssetImage('assets/images/logo.png') as ImageProvider,
-    child: _profileImage == null
-        ? const Icon(Icons.camera_alt, size: 30, color: Colors.white)
-        : null,
-  ),
+  radius: 60,
+  backgroundImage: _profileImage != null
+      ? FileImage(_profileImage!)
+      : (dpBase64 != null
+          ? MemoryImage(base64Decode(dpBase64!.split(',').last)) // Base64 decode
+          : const AssetImage('assets/images/logo.png') as ImageProvider),
+  child: (_profileImage == null && dpBase64 == null)
+      ? const Icon(Icons.camera_alt, size: 30, color: Colors.white)
+      : null,
 ),
+                    ),
+
 
                     Padding(
                     padding: EdgeInsets.all(20),
@@ -462,6 +470,7 @@ void loadContent()async{
                         )
                     ),
                   ),
+                  // Image.network("https://flutter.dev/images/flutter-logo-sharing.png"),
                     ListTile(
                       title: Text('Male',style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Color.fromARGB(150, 0, 0, 0)),),
                       leading: Radio<String>(
