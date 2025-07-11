@@ -320,7 +320,7 @@ void loadContent()async{
     String name=_namec.text;
     String bio=_bioc.text;
     String no=_noc.text;
-    if(name=='' || bio=='' || no=='' || _selectedGender=='' || myServices==[])
+    if(name=='' || bio=='' || no=='' || _selectedGender=='' || myServices.isEmpty)
     {
       print('somthng is empty');
       setState(() {
@@ -470,7 +470,6 @@ void loadContent()async{
                         )
                     ),
                   ),
-                  // Image.network("https://flutter.dev/images/flutter-logo-sharing.png"),
                     ListTile(
                       title: Text('Male',style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Color.fromARGB(150, 0, 0, 0)),),
                       leading: Radio<String>(
