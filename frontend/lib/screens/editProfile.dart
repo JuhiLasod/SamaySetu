@@ -393,7 +393,7 @@ void loadContent()async{
                 padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: Row(
                   children: [
-                    Image.asset('assets/images/logo.png',fit: BoxFit.contain, ),
+                    Padding(padding:EdgeInsets.all(20),child: Image.asset('assets/images/logo.png',fit: BoxFit.contain, )),
                     Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0),child: Text("SamaySetu",style: TextStyle(fontFamily: 'title',fontSize:42, color: Color.fromARGB(255, 255, 255, 255)),))
                   ],
                 ),

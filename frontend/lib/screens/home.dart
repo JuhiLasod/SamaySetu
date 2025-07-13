@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import './login.dart';
 import './editProfile.dart';
+import './explore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class home extends StatefulWidget
 {
@@ -40,6 +41,8 @@ class _homeState extends State<home>
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>editProfile()));
     }
   }
+
+  
   @override
   void initState()
   {
@@ -59,6 +62,14 @@ class _homeState extends State<home>
     return Scaffold(
       body: Column(
         children: [
+          Padding(
+            padding: EdgeInsets.all(50),
+            child:ElevatedButton(
+              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>explore()));},  
+              child: Text('explore')
+            )
+          ),
+
           Padding( 
             padding: EdgeInsets.all(50),
             child: ElevatedButton(
