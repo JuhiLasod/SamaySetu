@@ -5,7 +5,7 @@ const exploreController=async(req,res)=>{
     console.log("reached to controller");
     const matchingUsers=await Profiles.find(
         {myskills: selected},
-        {name:1, _id: 0}
+        {name:1, email:1, _id: 0}
     );
     res.json(matchingUsers); 
     //  res.sendStatus(200);

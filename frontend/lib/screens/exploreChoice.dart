@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import "./askForService.dart";
 
 class exploreChoice extends StatefulWidget{
   final String selected;
@@ -13,7 +14,7 @@ class exploreChoice extends StatefulWidget{
 class _exploreChoiceState extends State<exploreChoice>
 {
   String msg='';
-  List <String>users=[];
+  List <Map<String,String>>users=[];
   void  loadUsers()async{
     try{
     final res= await http.post(Uri.parse("http://10.0.2.2:8000/explore/load-users"),
@@ -24,7 +25,11 @@ class _exploreChoiceState extends State<exploreChoice>
     {
       List data=jsonDecode(res.body);
       setState((){
-        users=data.map<String>((item)=>item['name'].toString()).toList();
+        // users=List<Map<String,String>>.from(data);
+        users = data.map<Map<String, String>>((user) => {
+        'name': user['name']?.toString() ?? '',
+        'email': user['email']?.toString() ?? '',
+        }).toList();
       });
       
     }
@@ -52,7 +57,7 @@ class _exploreChoiceState extends State<exploreChoice>
     return Scaffold(
       body: Column(
         children: [
-          Text('msg'),
+          Text(msg),
           if(users.isEmpty)
           Padding(padding: EdgeInsets.all(40),child: Text("no service providers found yet for this service"))
           else
@@ -60,7 +65,11 @@ class _exploreChoiceState extends State<exploreChoice>
             ListView.builder(
               itemCount: users.length,
               itemBuilder: (context,index){
-                return ListTile(title: Text(users[index]),);
+                return Column(children:[ 
+                  ListTile(title: Text(users[index]['name'] ?? 'no name'),),
+                  Text(users[index]['email'] ?? 'no email'),
+                  ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>askForService(email:users[index]['email'] ?? 'no email')));}, child: Text('Ask for availaibility'))
+                ]);
               }
             )
             
