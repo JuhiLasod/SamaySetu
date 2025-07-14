@@ -1,7 +1,9 @@
 const askForService=async(req,res)=>{
     try{
-        const {email,date,time,place}=req.body;
-        console.log("reaching to backend");
+        const {email,datetime,place}=req.body;
+        console.log(email);
+        console.log(datetime);
+        console.log(place);
         res.sendStatus(200);
     }
     catch(e)
