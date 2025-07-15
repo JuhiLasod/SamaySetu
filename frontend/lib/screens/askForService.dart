@@ -103,7 +103,9 @@ class afsState extends State<askForService>
 }
 
   void afs ()async{
-    
+    setState((){
+      msg='';
+    });
 String place=_placec.text;
 // print("sending");
 // print(formattedDateTime);
@@ -129,7 +131,10 @@ String formattedDateTime = combinedDateTime.toIso8601String();
     {
       setState(() {
         msg='Your request is successfully sent. Wait until they accept your request.';
-      });
+        selectedDate=null;
+        selectedTime=null;
+        _placec.text='';
+      }); 
     }
     else
     {
