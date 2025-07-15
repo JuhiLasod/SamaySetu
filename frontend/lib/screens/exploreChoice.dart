@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import "./askForService.dart";
 
@@ -18,6 +19,9 @@ class _exploreChoiceState extends State<exploreChoice>
   List <Map<String,String>>users=[];
   void  loadUsers()async{
     try{
+
+      final prefs=await SharedPreferences.getInstance();
+      final from=prefs.getString('email');
     final res= await http.post(Uri.parse("http://10.0.2.2:8000/explore/load-users"),
       headers:{'Content-Type':'application/json'},
       body:jsonEncode({'selected':widget.selected})
@@ -103,7 +107,7 @@ class _exploreChoiceState extends State<exploreChoice>
                           
                         ),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>askForService(email:users[index]['email'] ?? 'no email')));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>askForService(email:users[index]['email'] ?? 'no email', selected: widget.selected,)));
                         }, 
                         child: Text('Ask for availaibility',style: TextStyle(fontFamily: 'basic',fontSize: 18),)
                       ),

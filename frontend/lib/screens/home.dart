@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import './login.dart';
 import './editProfile.dart';
+import "./myRequests.dart";
 import './explore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class home extends StatefulWidget
@@ -19,6 +20,17 @@ class _homeState extends State<home>
     await prefs.clear();
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const login()));
   }
+
+  void handleMyReq ()async{
+    final prefs=await SharedPreferences.getInstance();
+    final from=await  prefs.getString('email');
+    print("sending");
+    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/my-req'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'from':from})
+    );
+  }
+
   void isProfile()async{
     final prefs=await SharedPreferences.getInstance();
     final email=await  prefs.getString('email');
@@ -41,6 +53,7 @@ class _homeState extends State<home>
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>editProfile()));
     }
   }
+
 
   
   @override
@@ -75,6 +88,15 @@ class _homeState extends State<home>
             child: ElevatedButton(
               onPressed: handleLogout, 
               child: Text('logout')
+            )
+          ),
+          
+          Padding( 
+            padding: EdgeInsets.all(50),
+            child: ElevatedButton(
+              onPressed: handleMyReq,
+              // onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>myRequests()));}, 
+              child: Text('My Requests')
             )
           ),
 

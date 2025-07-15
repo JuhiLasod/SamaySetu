@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class askForService extends StatefulWidget{
   // const askForService({super.key});
   final String email;
-  const askForService({required this.email, Key? key}): super(key:key);
+  final String selected;
+  const askForService({required this.email,required this.selected, Key? key}): super(key:key);
   @override
   State<askForService> createState()=> afsState();
 }
@@ -103,6 +106,8 @@ class afsState extends State<askForService>
 }
 
   void afs ()async{
+    final prefs=await SharedPreferences.getInstance();
+      final from=prefs.getString('email');
     setState((){
       msg='';
     });
@@ -125,7 +130,7 @@ if(selectedDate==null || selectedTime==null || place.isEmpty ){
 String formattedDateTime = combinedDateTime.toIso8601String();
     final res=await http.post(Uri.parse('http://10.0.2.2:8000/explore/ask-for-service'),
     headers:{'Content-Type':'application/json'},
-    body: jsonEncode({'email':widget.email, 'datetime':formattedDateTime, 'place': place})
+    body: jsonEncode({'from': from, 'service': widget.selected ,'to':widget.email, 'datetime':formattedDateTime, 'place': place})
     );
     if(res.statusCode==200)
     {
