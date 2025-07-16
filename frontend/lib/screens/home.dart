@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './login.dart';
 import './editProfile.dart';
 import "./myRequests.dart";
+import "./reqToMe.dart";
 import './explore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class home extends StatefulWidget
@@ -98,6 +99,15 @@ class _homeState extends State<home>
               // onPressed: handleMyReq,
               onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>myRequests()));}, 
               child: Text('My Requests')
+            )
+          ),
+
+          Padding( 
+            padding: EdgeInsets.all(50),
+            child: ElevatedButton(
+              // onPressed: handleMyReq,
+              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>reqToMe()));}, 
+              child: Text('Requests to me')
             )
           ),
 
