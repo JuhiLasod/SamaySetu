@@ -1,16 +1,18 @@
 import Requests from "../models/Requests.js";
 
 const reqToMe=async(req,res)=>{
-    try{
-        const {to}= req.body;
+    
+        const {from}= req.body;try{
+        console.log(from);
         const req=await Requests.find({
-            to: to,
-            from: 1, service: 1, datetime: 1, place: 1
+            to: from},{
+            from: 1, service: 1, datetime: 1, place: 1,_id:0
         });
         res.json(req);
     }
     catch(e)
     {
+        console.log("error in backend");
         res.sendStatus(500);
     }
 }
