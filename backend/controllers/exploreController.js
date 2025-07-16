@@ -7,10 +7,11 @@ const exploreController=async(req,res)=>{
         {myskills: selected},
         {name:1, email:1, _id: 0}
     );
+    console.log(matchingUsers);
     res.json(matchingUsers); 
     //  res.sendStatus(200);
     console.log(matchingUsers);
-    }
+    } 
     catch(e)
     {
         return res.sendStatus(500); 

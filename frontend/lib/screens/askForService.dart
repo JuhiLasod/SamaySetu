@@ -128,6 +128,11 @@ if(selectedDate==null || selectedTime==null || place.isEmpty ){
   selectedTime!.minute,
 );
 String formattedDateTime = combinedDateTime.toIso8601String();
+    print("sending");
+    print(from);
+    // print();
+    print(widget.email);
+
     final res=await http.post(Uri.parse('http://10.0.2.2:8000/explore/ask-for-service'),
     headers:{'Content-Type':'application/json'},
     body: jsonEncode({'from': from, 'service': widget.selected ,'to':widget.email, 'datetime':formattedDateTime, 'place': place})
