@@ -5,6 +5,7 @@ const requestsSchema=new mongoose.Schema({
     to: {type:String},
     service:{type:String}, 
     datetime: {type: String},
-    place:{type:String}
+    place:{type:String},
+    status: {type: String, default:'Pending'}
 })
 export default mongoose.model('Requests',requestsSchema);

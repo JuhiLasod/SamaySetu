@@ -33,7 +33,7 @@ const askForService=async(req,res)=>{
 
         console.log("mail succ sent");
         try{
-        const newreq= new Requests({from,to, service, datetime, place});
+        const newreq= new Requests({from,to, service, datetime, place,status: 'pending'});
         await newreq.save();
         console.log("saved in req db");
         }catch(e)
