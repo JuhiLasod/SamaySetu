@@ -83,7 +83,7 @@ class _myreqState extends State<myRequests>
                         Padding(padding: EdgeInsets.all(10),child: Text("To: ${reqs['to'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                           
+                        Padding(padding: EdgeInsets.all(10),child: Text("Status: ${reqs['status'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                       ],)
                       
                     ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +14,9 @@ class reqToMe extends StatefulWidget
 class _reqToMeState extends State<reqToMe>
 {
   List<dynamic> req=[];
-
+  String status='pending';
+  bool statusSet=false;
+  String msg='';
   Future<void> handleMyReq ()async{
     final prefs=await SharedPreferences.getInstance();
     final from=await  prefs.getString('email');
@@ -29,6 +33,39 @@ class _reqToMeState extends State<reqToMe>
       req=data;
     });
 
+  }
+  void handleStatus(String from, String to, String service, String datetime, String place, String status)async{
+    print(from);
+    print(to);
+    print(service);
+    print(datetime);
+    print(place);
+    print(status);
+    final res = await http.post(Uri.parse("http://10.0.2.2:8000/req/set-status"),
+      headers: {'Content-Type':'application/json'},
+      body: jsonEncode({ 'from': from,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
+  );
+  if(res.statusCode!=500)
+  {
+    setState((){
+      statusSet=true;
+      if(status!='declined')
+      {
+        msg="You have declined this request!";
+      }
+      else{
+        msg="You have declined this request!";
+      }
+    });
+  }
+  else
+  {
+    setState(() {
+      status='pending';
+    });
+  }
+    // print(from);
+    // print(from);
   }
   @override
   void initState()
@@ -66,7 +103,7 @@ class _reqToMeState extends State<reqToMe>
                 return Padding(
                   padding: EdgeInsets.all(screenWidth * 0.03),
                   child: Container(
-                    height: screenHeight * 0.23,
+                    height: screenHeight * 0.3,
                     margin: EdgeInsets.all(screenWidth *0.05),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular( 20),
@@ -86,7 +123,26 @@ class _reqToMeState extends State<reqToMe>
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                           
+                        if(status=='pending')
+                        ElevatedButton(
+                          onPressed:(){
+                            setState(()
+                            {status='accept';});
+                               handleStatus(reqs['from'] ?? '',reqs['to'] ?? '',reqs['service'] ?? '',reqs['datetime'] ?? '',reqs['place'] ?? '',status);
+                          },
+                          child:Text('Accept')
+                        ),
+                        if(status=='pending')
+                        ElevatedButton(
+                          onPressed:(){
+                            setState(()
+                            {status='decline';});
+                               handleStatus(reqs['from'] ?? '',reqs['to'] ?? '',reqs['service'] ?? '',reqs['datetime'] ?? '',reqs['place'] ?? '',status,);
+                          },
+                          child:Text('Decline')
+                        ),
+                        // if(status!='pending')
+                        Text(msg)
                       ],)
                       
                     ),
