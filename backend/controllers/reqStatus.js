@@ -17,7 +17,9 @@ const reqStatus=async(req,res)=>{
             { new: true }
         );
         if(updatedReq)
+        { console.log("inside if");
         res.sendStatus(200)
+        }
         else
             res.sendStatus(500);
     }
