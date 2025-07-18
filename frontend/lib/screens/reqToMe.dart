@@ -14,7 +14,10 @@ class reqToMe extends StatefulWidget
 class _reqToMeState extends State<reqToMe>
 {
   List<dynamic> req=[];
-  String status='pending';
+  // String status='pending';
+  Map<int, String> statusMap = {};  
+Map<int, String> msgMap = {};
+
   bool statusSet=false;
   String msg='';
   Future<void> handleMyReq ()async{
@@ -22,6 +25,7 @@ class _reqToMeState extends State<reqToMe>
     final from=await  prefs.getString('email');
     print(from);
     print("okkkkkayyyyyyyyyyyyyyyyy");
+    
     final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/req-to-me'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'from':from})
@@ -30,11 +34,30 @@ class _reqToMeState extends State<reqToMe>
     final data= jsonDecode(res.body);
     
     setState(() {
-      req=data;
-    });
+    req = data;
+
+    statusMap.clear(); // reset
+    msgMap.clear();    // reset
+
+    for (int i = 0; i < data.length; i++) {
+      final status = data[i]['status'] ?? 'pending';
+      statusMap[i] = status;
+
+      if (status == 'accept') {
+        msgMap[i] = 'You have accepted this request!';
+      } else if (status == 'decline') {
+        msgMap[i] = 'You have declined this request!';
+      }
+      print(msgMap[i]);
+    }
+  });
+
+
 
   }
-  void handleStatus(String from, String to, String service, String datetime, String place, String status)async{
+  void handleStatus(int index, String from, String to, String service, String datetime, String place, String status)async{
+    // final prefs=await SharedPreferences.getInstance();
+    // final to=await  prefs.getString('email');
     print(from);
     print(to);
     print(service);
@@ -47,22 +70,20 @@ class _reqToMeState extends State<reqToMe>
   );
   if(res.statusCode!=500)
   {
-    setState((){
-      statusSet=true;
-      if(status!='declined')
-      {
-        msg="You have declined this request!";
-      }
-      else{
-        msg="You have declined this request!";
-      }
-    });
+    setState(() {
+  statusMap[index] = status;
+  msgMap[index] = (status == 'accept')
+      ? "You have accepted this request!"
+      : "You have declined this request!";
+});
+
   }
   else
   {
     setState(() {
-      status='pending';
-    });
+  statusMap[index] = 'pending';
+});
+
   }
     // print(from);
     // print(from);
@@ -123,26 +144,27 @@ class _reqToMeState extends State<reqToMe>
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(status=='pending')
-                        ElevatedButton(
-                          onPressed:(){
-                            setState(()
-                            {status='accept';});
-                               handleStatus(reqs['from'] ?? '',reqs['to'] ?? '',reqs['service'] ?? '',reqs['datetime'] ?? '',reqs['place'] ?? '',status);
-                          },
-                          child:Text('Accept')
-                        ),
-                        if(status=='pending')
-                        ElevatedButton(
-                          onPressed:(){
-                            setState(()
-                            {status='decline';});
-                               handleStatus(reqs['from'] ?? '',reqs['to'] ?? '',reqs['service'] ?? '',reqs['datetime'] ?? '',reqs['place'] ?? '',status,);
-                          },
-                          child:Text('Decline')
-                        ),
-                        // if(status!='pending')
-                        Text(msg)
+                        if ((statusMap[index] ?? 'pending') == 'pending') ...[
+  ElevatedButton(
+    onPressed: () {
+      handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'accept');
+    },
+    child: Text('Accept'),
+  ),
+  ElevatedButton(
+    onPressed: () {
+      handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'decline');
+    },
+    child: Text('Decline'),
+  ),
+] else ...[
+  Text(
+    msgMap[index] ?? '',
+    style: TextStyle(fontSize: 16, color: Colors.green),
+  )
+]
+
+
                       ],)
                       
                     ),

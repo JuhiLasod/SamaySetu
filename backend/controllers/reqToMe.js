@@ -6,8 +6,9 @@ const reqToMe=async(req,res)=>{
         console.log(from);
         const req=await Requests.find({
             to: from},{
-            from: 1, service: 1, datetime: 1, place: 1,_id:0
+            from: 1,to:1, service: 1, datetime: 1, place: 1,status: 1, _id:0
         });
+        console.log(req);
         res.json(req);
     }
     catch(e)
