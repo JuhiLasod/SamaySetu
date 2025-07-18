@@ -63,7 +63,7 @@ class _myreqState extends State<myRequests>
                 return Padding(
                   padding: EdgeInsets.all(screenWidth * 0.03),
                   child: Container(
-                    height: screenHeight * 0.23,
+                    height: screenHeight * 0.28,
                     margin: EdgeInsets.all(screenWidth *0.05),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular( 20),
@@ -78,12 +78,18 @@ class _myreqState extends State<myRequests>
                     ),
                     
                     child: ListTile(
-                      title:Text(reqs['service'] ?? '',textAlign: TextAlign.center,style: TextStyle(fontSize: 28,fontFamily: 'title',color: Color.fromARGB(255, 15, 111, 196),fontWeight: FontWeight.bold)),
+                      title:Text(reqs['service'] ?? '',textAlign: TextAlign.center,style: TextStyle(fontSize: 30,fontFamily: 'title',color: Color.fromARGB(255, 15, 111, 196),fontWeight: FontWeight.bold)),
                       subtitle: Column(children: [
                         Padding(padding: EdgeInsets.all(10),child: Text("To: ${reqs['to'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        Padding(padding: EdgeInsets.all(10),child: Text("Status: ${reqs['status'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
+                        if(reqs['status']=='accept')
+                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
+                        else if(reqs['status']=='decline')
+                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Declined" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.red)))
+                        else 
+                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Pending" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.amber)))
+                         
                       ],)
                       
                     ),

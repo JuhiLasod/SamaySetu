@@ -139,28 +139,53 @@ Map<int, String> msgMap = {};
                     ),
                     
                     child: ListTile(
-                      title:Text(reqs['service'] ?? '',textAlign: TextAlign.center,style: TextStyle(fontSize: 28,fontFamily: 'title',color: Color.fromARGB(255, 15, 111, 196),fontWeight: FontWeight.bold)),
+                      title:Text(reqs['service'] ?? '',textAlign: TextAlign.center,style: TextStyle(fontSize: 30,fontFamily: 'title',color: Color.fromARGB(255, 15, 111, 196),fontWeight: FontWeight.bold)),
                       subtitle: Column(children: [
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         if ((statusMap[index] ?? 'pending') == 'pending') ...[
-  ElevatedButton(
-    onPressed: () {
-      handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'accept');
-    },
-    child: Text('Accept'),
-  ),
-  ElevatedButton(
-    onPressed: () {
-      handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'decline');
-    },
-    child: Text('Decline'),
-  ),
+  Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children:[
+    Padding(padding:EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: ElevatedButton(
+        onPressed: () {
+          handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'accept');
+        },
+        child: Text('Accept'),
+      ),
+    ),
+    Padding(padding:EdgeInsets.fromLTRB(10, 10, 10, 10),
+    child:
+    ElevatedButton(
+      onPressed: () {
+        handleStatus(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', 'decline');
+      },
+      child: Text('Decline'),
+    ),)]),
+  )
 ] else ...[
-  Text(
-    msgMap[index] ?? '',
-    style: TextStyle(fontSize: 16, color: Colors.green),
+  if(msgMap[index]=='You have accepted this request!')
+  Padding(
+    padding:EdgeInsets.fromLTRB(10, 10, 10, 10),
+    child: 
+    
+    Text(
+      msgMap[index] ?? '',
+      style: TextStyle(fontSize: 22, fontFamily: 'basic',color: Colors.green),
+    ),
+  )
+  else
+  Padding(
+    padding:EdgeInsets.fromLTRB(10, 10, 10, 10),
+    child: 
+    
+    Text(
+      msgMap[index] ?? '',
+      style: TextStyle(fontSize: 22, fontFamily: 'basic',color: Colors.red),
+    ),
   )
 ]
 
