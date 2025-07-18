@@ -14,9 +14,12 @@ class reqToMe extends StatefulWidget
 class _reqToMeState extends State<reqToMe>
 {
   List<dynamic> req=[];
+  DateTime now = DateTime.now().toUtc();
   // String status='pending';
   Map<int, String> statusMap = {};  
-Map<int, String> msgMap = {};
+  Map<int, String> msgMap = {};
+  Map<int, bool> showMAD = {};
+  // DateTime now = DateTime.now().toUtc();
 
   bool statusSet=false;
   String msg='';
@@ -42,13 +45,30 @@ Map<int, String> msgMap = {};
     for (int i = 0; i < data.length; i++) {
       final status = data[i]['status'] ?? 'pending';
       statusMap[i] = status;
-
+      
       if (status == 'accept') {
         msgMap[i] = 'You have accepted this request!';
       } else if (status == 'decline') {
         msgMap[i] = 'You have declined this request!';
       }
       print(msgMap[i]);
+      DateTime dt = DateTime.parse(data[i]['datetime']).toUtc();
+      
+      if(statusMap[i] =='accept' )
+      {
+        print("accept wale if k andr");
+        if ( dt .isAtSameMomentAs(now) || dt .isBefore(now)) {
+        setState(() {
+          showMAD[i]=true;
+        });
+        }
+      }
+      else{
+        setState(() {
+          showMAD[i]=false;
+        });
+      }
+      
     }
   });
 
@@ -144,6 +164,16 @@ Map<int, String> msgMap = {};
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
+                        if(statusMap[index]=='accept' && showMAD[index]==true)
+                          Padding(padding: EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                
+                              ),
+                              onPressed: (){}, 
+                              child: Text('Mark as done',style:TextStyle(fontFamily: 'basic',fontSize: 20, color: Colors.green))))
+                        else
                         if ((statusMap[index] ?? 'pending') == 'pending') ...[
   Center(
     child: Row(
