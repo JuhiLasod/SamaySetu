@@ -1,4 +1,5 @@
 import Requests from '../models/Requests.js';
+import Profiles from "../models/Profiles.js";
 const completeController=async(req,res)=>{
     try{
         const{from ,to ,service, datetime, place,status}=req.body;
@@ -17,8 +18,24 @@ const completeController=async(req,res)=>{
                 );
         if(found)
         {
+            const rec=await Profiles.findOne(
+                {'email':from},
+                
+            )   
+            const recbal=rec.balance-1;
+            const provider=await Profiles.findOneAndUpdate(
+                {'email':to},
+             
+            )
+            const probal=provider.balance+1;
+            await Profiles.updateOne({ email: from }, { $set: { balance: recbal } });
+            await Profiles.updateOne({ email: to }, { $set: { balance: probal } });
             console.log("found the record");
+            
             return res.sendStatus(200);
+        
+            res.sendStatus(500);
+        
             
         }
         else{
