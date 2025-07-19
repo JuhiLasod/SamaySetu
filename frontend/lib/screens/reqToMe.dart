@@ -108,6 +108,22 @@ class _reqToMeState extends State<reqToMe>
     // print(from);
     // print(from);
   }
+  void handleMAD(int index, String from, String to, String service, String datetime, String place)async
+  {
+    print("inside handleMAD");
+    final res = await http.post(Uri.parse("http://10.0.2.2:8000/req/set-mad"),
+      headers: {'Content-Type':'application/json'},
+      body: jsonEncode({ 'from': from,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':'accept'})
+    );
+    print("Response status: ${res.statusCode}");
+    if(res.statusCode==200)
+    {
+      setState(() {
+        statusMap[index]='mad';
+        print("mad set");
+      });
+    }
+  }
   @override
   void initState()
   {
@@ -144,7 +160,7 @@ class _reqToMeState extends State<reqToMe>
                 return Padding(
                   padding: EdgeInsets.all(screenWidth * 0.03),
                   child: Container(
-                    height: screenHeight * 0.3,
+                    height: screenHeight * 0.32,
                     margin: EdgeInsets.all(screenWidth *0.05),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular( 20),
@@ -164,15 +180,26 @@ class _reqToMeState extends State<reqToMe>
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(statusMap[index]=='accept' && showMAD[index]==true)
+                        if(statusMap[index]=='mad')
+                        Text("waiting for recievers confirmation")
+                        else if(statusMap[index]=='accept' && showMAD[index]==true)
                           Padding(padding: EdgeInsets.all(10),
-                            child: ElevatedButton(
+                            child: Column(children:[ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 
                               ),
-                              onPressed: (){}, 
-                              child: Text('Mark as done',style:TextStyle(fontFamily: 'basic',fontSize: 20, color: Colors.green))))
+                              onPressed: (){handleMAD(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '');}, 
+                              child: Text('Mark as done',
+                                style:TextStyle(
+                                  fontFamily: 'basic',
+                                  fontSize: 20, 
+                                  color: Colors.green
+                                )
+                              )
+                            ), 
+                            Text('Mark as done within 48 hrs after delivering the service to gain your reward',textAlign: TextAlign.center,style:TextStyle(color: Color.fromARGB(255, 15, 111, 196)))]))
+                      
                         else
                         if ((statusMap[index] ?? 'pending') == 'pending') ...[
   Center(
@@ -197,7 +224,7 @@ class _reqToMeState extends State<reqToMe>
     ),)]),
   )
 ] else ...[
-  if(msgMap[index]=='You have accepted this request!')
+  if(statusMap[index]=='accept'&& msgMap[index]=='You have accepted this request!')
   Padding(
     padding:EdgeInsets.fromLTRB(10, 10, 10, 10),
     child: 
@@ -207,7 +234,7 @@ class _reqToMeState extends State<reqToMe>
       style: TextStyle(fontSize: 22, fontFamily: 'basic',color: Colors.green),
     ),
   )
-  else
+  else if(statusMap[index]=='decline')
   Padding(
     padding:EdgeInsets.fromLTRB(10, 10, 10, 10),
     child: 
