@@ -12,6 +12,8 @@ class myRequests extends StatefulWidget
 class _myreqState extends State<myRequests>
 {
   List<dynamic> req=[];
+  Map <int,String> statusMap={};
+  Map <int,String> msgMap={};
 
   Future<void> handleMyReq ()async{
     final prefs=await SharedPreferences.getInstance();
@@ -24,8 +26,56 @@ class _myreqState extends State<myRequests>
     final data= jsonDecode(res.body);
     setState(() {
       req=data;
-    });
+    
 
+    statusMap.clear(); // reset
+    msgMap.clear();    // reset
+
+    for (int i = 0; i < data.length; i++) {
+      final status = data[i]['status'] ?? 'pending';
+      statusMap[i] = status;
+      
+      if (status == 'accept') {
+        msgMap[i] = 'You have accepted this request!';
+      } else if (status == 'decline') {
+        msgMap[i] = 'You have declined this request!';
+      }
+    }});
+
+  }
+  bool withinTime(String given)
+  {
+    DateTime dt = DateTime.parse(given).toUtc();
+    DateTime now = DateTime.now().toUtc();
+    Duration diff = now.difference(dt);
+    return diff.inHours <= 48 && !dt.isAfter(now);
+  }
+  bool isBeforeNow(String given)
+  {
+    DateTime dt = DateTime.parse(given).toUtc();
+    DateTime now = DateTime.now().toUtc();
+    
+    return !dt.isAfter(now);
+  }
+  void complete(int index, String from, String to, String service, String datetime, String place, String status)async{
+    final prefs=await SharedPreferences.getInstance();
+    final email=await  prefs.getString('email');
+    print(email);
+    print(to);
+    print(service);
+    print(datetime);
+    print(place);
+    print(status);
+    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/complete'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({ 'from': email,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
+    );
+    if(res.statusCode==200)
+    {
+      setState(() {
+        statusMap[index]='complete';
+      });
+    }
   }
   @override
   void initState()
@@ -33,6 +83,7 @@ class _myreqState extends State<myRequests>
     super.initState();
      handleMyReq();
   }
+
   Widget build(BuildContext context)
   {
     final screenHeight=MediaQuery.of(context).size.height;
@@ -83,9 +134,20 @@ class _myreqState extends State<myRequests>
                         Padding(padding: EdgeInsets.all(10),child: Text("To: ${reqs['to'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(reqs['status']=='accept')
-                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
-                        else if(reqs['status']=='decline')
+                        if(statusMap[index]=='complete')
+                          Text("transaction completed")
+                        else if(statusMap[index]=='accept'|| statusMap[index]=='mad')
+                          if(isBeforeNow(reqs['datetime']))
+                            if(withinTime(reqs['datetime']))
+                              Row(children:[
+                                  ElevatedButton(onPressed: (){}, child: Text('dispute')),
+                                  ElevatedButton(onPressed: (){complete(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', reqs['status'] ?? '');}, child: Text('confirm')),
+                              ])
+                            else
+                              Text("since you didnt inform us the status of recieving this service we assumed that you did recieve it and you balace was successfully updated")
+                          else
+                            Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
+                        else if(statusMap[index]=='decline')
                           Padding(padding: EdgeInsets.all(10),child: Text("Status: Declined" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.red)))
                         else 
                           Padding(padding: EdgeInsets.all(10),child: Text("Status: Pending" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.amber)))
