@@ -180,8 +180,10 @@ class _reqToMeState extends State<reqToMe>
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(statusMap[index]=='mad')
-                        Text("waiting for recievers confirmation")
+                        if(statusMap[index]=='complete')
+                          Text("Transaction completed")
+                        else if(statusMap[index]=='mad')
+                          Text("waiting for recievers confirmation")
                         else if(statusMap[index]=='accept' && showMAD[index]==true)
                           Padding(padding: EdgeInsets.all(10),
                             child: Column(children:[ElevatedButton(
