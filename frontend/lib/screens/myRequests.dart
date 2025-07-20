@@ -34,14 +34,26 @@ class _myreqState extends State<myRequests>
     for (int i = 0; i < data.length; i++) {
       final status = data[i]['status'] ?? 'pending';
       statusMap[i] = status;
-      
-      if (status == 'accept') {
+      if((status=='accept' || status=='mad') && afterTime(data[i]['datetime']))
+      {
+        print("checking for status");
+        complete(i,data[i]['from'], data[i]['to'],  data[i]['service'],  data[i]['datetime'],  data[i]['place'],  data[i]['status']);
+      }
+      else if (status == 'accept') {
+
         msgMap[i] = 'You have accepted this request!';
       } else if (status == 'decline') {
         msgMap[i] = 'You have declined this request!';
       }
     }});
 
+  }
+  bool afterTime(String given)
+  {
+    DateTime dt = DateTime.parse(given).toUtc();
+    DateTime now = DateTime.now().toUtc();
+    Duration diff = now.difference(dt);
+    return diff.inHours > 48 && !dt.isAfter(now);
   }
   bool withinTime(String given)
   {
@@ -74,6 +86,7 @@ class _myreqState extends State<myRequests>
     {
       setState(() {
         statusMap[index]='complete';
+        msgMap[index] = 'Transaction completed!';
       });
     }
   }
@@ -135,22 +148,27 @@ class _myreqState extends State<myRequests>
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         if(statusMap[index]=='complete')
-                          Text("transaction completed")
+                          Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 15),child: Text("Transaction completed",style: TextStyle(fontFamily: 'basic',fontSize: 20,color:  Colors.green),))
                         else if(statusMap[index]=='accept'|| statusMap[index]=='mad')
                           if(isBeforeNow(reqs['datetime']))
                             if(withinTime(reqs['datetime']))
-                              Row(children:[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:[
+
                                   ElevatedButton(onPressed: (){}, child: Text('dispute')),
                                   ElevatedButton(onPressed: (){complete(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', reqs['status'] ?? '');}, child: Text('confirm')),
                               ])
                             else
-                              Text("since you didnt inform us the status of recieving this service we assumed that you did recieve it and you balace was successfully updated")
+                            Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
+                        
                           else
                             Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
                         else if(statusMap[index]=='decline')
                           Padding(padding: EdgeInsets.all(10),child: Text("Status: Declined" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.red)))
                         else 
-                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Pending" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.amber)))
+                          Padding(padding: EdgeInsets.all(10),child: Text("Status: Pending" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.amber))),
+                        
                          
                       ],)
                       
