@@ -33,10 +33,6 @@ const completeController=async(req,res)=>{
             console.log("found the record");
             
             return res.sendStatus(200);
-        
-            res.sendStatus(500);
-        
-            
         }
         else{
             // console.log("nit found");
