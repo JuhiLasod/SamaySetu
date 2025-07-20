@@ -119,6 +119,12 @@ class _myreqState extends State<myRequests>
               ),
             ),
           ),
+          Container(
+            height: screenHeight * 0.08,
+            width: screenWidth*1,
+            color: Color.fromARGB(255, 0, 94, 176),
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0),child: Center(child: Text("Services requested by you",style: TextStyle(fontFamily: 'basic',fontSize: 25,color: Color.fromARGB(255,255, 255, 255)))))),
+           
            Expanded(
              child:  ListView.builder(
                          itemCount: req.length,
@@ -128,12 +134,12 @@ class _myreqState extends State<myRequests>
                   padding: EdgeInsets.all(screenWidth * 0.03),
                   child: Container(
                     height: screenHeight * 0.28,
-                    margin: EdgeInsets.all(screenWidth *0.05),
+                    margin: EdgeInsets.fromLTRB(screenWidth * 0.05,0,screenWidth * 0.05,0,),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular( 20),
                       border: Border.all(color: Colors.grey.shade400, width: 1),
                       boxShadow:[ BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Color.fromARGB(255, 225, 236, 245),
         spreadRadius: 2,
         blurRadius: 4,
         offset: Offset(0, 3), )// shadow direction: bottom
@@ -156,8 +162,24 @@ class _myreqState extends State<myRequests>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children:[
 
-                                  ElevatedButton(onPressed: (){}, child: Text('dispute')),
-                                  ElevatedButton(onPressed: (){complete(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', reqs['status'] ?? '');}, child: Text('confirm')),
+                                  Padding(padding:EdgeInsets.fromLTRB(10, 0, 10, 0),child: ElevatedButton(
+                                    style:ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      backgroundColor: Colors.red
+                                    ),
+                                    onPressed: (){}, 
+                                    child: Text('Dispute',style: TextStyle(fontFamily: 'basic',color: Colors.white,fontSize: 18)))
+                                  ),
+                                  Padding(padding:EdgeInsets.fromLTRB(10, 0, 10, 0), child: ElevatedButton(
+                                    style:ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      backgroundColor: Colors.green
+                                      
+                                    ),
+                                    onPressed: (){
+                                      complete(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', reqs['status'] ?? '');
+                                    }, 
+                                    child: Text('confirm' ,style: TextStyle(fontFamily: 'basic',color: Colors.white,fontSize: 18)))),
                               ])
                             else
                             Padding(padding: EdgeInsets.all(10),child: Text("Status: Accepted" , style:TextStyle(fontFamily: 'basic',fontSize: 18,color: Colors.green)))
