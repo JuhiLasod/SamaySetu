@@ -186,7 +186,9 @@ class _reqToMeState extends State<reqToMe>
                         Padding(padding: EdgeInsets.all(10),child: Text("From: ${reqs['from'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(statusMap[index]=='complete')
+                        if(statusMap[index]=='dispute')
+                          Center(child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 0, 10),child: Text("This service is marked as disputed. We are looking into the dispute.",textAlign: TextAlign.center,style: TextStyle(fontFamily: 'basic',fontSize: 18,color:  Colors.red),)))
+                        else if(statusMap[index]=='complete')
                           Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 20),child: Text("Transaction completed",style: TextStyle(fontFamily: 'basic',fontSize: 20,color:  Colors.green),))
                         else if(statusMap[index]=='mad')
                           Padding(padding:EdgeInsets.fromLTRB(0, 20, 0, 20),child: Text("Waiting for recievers confirmation...",style:TextStyle(fontSize: 20,fontFamily: 'basic',color:Colors.amber)))

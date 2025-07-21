@@ -90,6 +90,29 @@ class _myreqState extends State<myRequests>
       });
     }
   }
+
+  void handleDispute(int index, String from, String to, String service, String datetime, String place, String status)async{
+    final prefs=await SharedPreferences.getInstance();
+    final email=await  prefs.getString('email');
+    print(email);
+    print(to);
+    print(service);
+    print(datetime);
+    print(place);
+    print(status);
+    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/dispute'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({ 'from': email,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
+    );
+    if(res.statusCode==200)
+    {
+      setState(() {
+        statusMap[index]='dispute';
+        msgMap[index] = 'Disputed service';
+      });
+    }
+  }
+
   @override
   void initState()
   {
@@ -140,9 +163,9 @@ class _myreqState extends State<myRequests>
                       border: Border.all(color: Colors.grey.shade400, width: 1),
                       boxShadow:[ BoxShadow(
                         color: Color.fromARGB(255, 225, 236, 245),
-        spreadRadius: 2,
-        blurRadius: 4,
-        offset: Offset(0, 3), )// shadow direction: bottom
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 3), )// shadow direction: bottom
                       ]
                       
                     ),
@@ -153,7 +176,9 @@ class _myreqState extends State<myRequests>
                         Padding(padding: EdgeInsets.all(10),child: Text("To: ${reqs['to'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("DateTime: ${reqs['datetime'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
                         Padding(padding: EdgeInsets.all(10),child: Text("Place: ${reqs['place'] ?? ''}" , style:TextStyle(fontFamily: 'basic',fontSize: 18))),
-                        if(statusMap[index]=='complete')
+                        if(statusMap[index]=='dispute')
+                          Center(child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 0, 10),child: Text("We are looking after the dispute. Sorry for the inconvinience.",textAlign: TextAlign.center,style: TextStyle(fontFamily: 'basic',fontSize: 18,color:  Colors.red),)))
+                        else if(statusMap[index]=='complete')
                           Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 15),child: Text("Transaction completed",style: TextStyle(fontFamily: 'basic',fontSize: 20,color:  Colors.green),))
                         else if(statusMap[index]=='accept'|| statusMap[index]=='mad')
                           if(isBeforeNow(reqs['datetime']))
@@ -167,7 +192,7 @@ class _myreqState extends State<myRequests>
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                       backgroundColor: Colors.red
                                     ),
-                                    onPressed: (){}, 
+                                    onPressed: (){handleDispute(index, reqs['from'] ?? '', reqs['to'] ?? '', reqs['service'] ?? '', reqs['datetime'] ?? '', reqs['place'] ?? '', reqs['status'] ?? '');}, 
                                     child: Text('Dispute',style: TextStyle(fontFamily: 'basic',color: Colors.white,fontSize: 18)))
                                   ),
                                   Padding(padding:EdgeInsets.fromLTRB(10, 0, 10, 0), child: ElevatedButton(
