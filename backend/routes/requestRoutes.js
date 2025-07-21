@@ -5,6 +5,7 @@ import reqStatus from "../controllers/reqStatus.js";
 import MADController from '../controllers/MADController.js';
 import disputeController from '../controllers/disputeController.js';
 import completeController from '../controllers/completeController.js';
+// import disputeController from '../controllers/disputeController.js';
 
 const requestRoutes=express.Router();
 
@@ -14,6 +15,6 @@ requestRoutes.post("/set-status",reqStatus);
 requestRoutes.post("/set-mad",MADController);
 requestRoutes.post("/dispute",disputeController);
 requestRoutes.post("/complete",completeController);
-
+// requestRoutes.post("/dispute",disputeController);
 
 export default requestRoutes;
