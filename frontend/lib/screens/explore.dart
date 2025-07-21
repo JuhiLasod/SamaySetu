@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import './exploreChoice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import "package:http/http.dart" as http;
+import "dart:convert";
+
 class explore extends StatefulWidget{
 
   @override
@@ -52,21 +56,65 @@ class _exploreState extends State<explore>{
   bool is73=false;
   bool is74=false;
 
+  bool balance=true;
+
+  Future<void> checkBalance()async
+  {
+    print("inside check balance fn");
+    final prefs=await SharedPreferences.getInstance();
+    final email=prefs.getString('email');
+    print(email);
+    // setState(() {
+    //   balance=false;
+    // });
+    final res= await http.post(Uri.parse("http://10.0.2.2:8000/req/check-balance"),
+      headers:{'Content-Type':'application/json'},
+      body: jsonEncode({'email':email})
+    );
+    print("Response status: ${res.statusCode}");
+    print("Response body: ${res.body}");
+    if(res.statusCode==200)
+      {
+        
+        setState(() {
+          balance=true;
+        });
+        print("balane ka setstate k baad");
+        print(balance);
+      }
+      else
+      {
+        setState(() {
+          balance=false;
+        });
+      }
+    }
+    
+      
+
   void chosen(String selected){
     
     Navigator.push(context, MaterialPageRoute(builder: (context)=> exploreChoice(selected: selected)));
   }
 
   @override
+
+  void initState()
+  {
+    super.initState();
+    print("checking balance");
+    checkBalance();
+  }
   Widget build(BuildContext context){
     final screenHeight= MediaQuery.of(context).size.height;
     final screenWidth=MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      body: 
+        Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children:[ 
+            
             Container(
             color: Color.fromARGB(255, 0, 0, 0),
             height: screenHeight * 0.12,
@@ -81,6 +129,16 @@ class _exploreState extends State<explore>{
               ),
             ),
           ),
+          if(!balance)
+            Expanded(
+              child: Center(
+                child: Padding(padding:EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text("Oops! You're out of balance. Start helping others to earn more and make the most of SamaySetu.", 
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Colors.red))
+                ),
+              ),
+            )
+          else
           Expanded(
             child: SingleChildScrollView(
               child: Column(children: [
@@ -1033,7 +1091,7 @@ class _exploreState extends State<explore>{
             ),
           )
           ]),
-      )
+      
     );
   }
 }
