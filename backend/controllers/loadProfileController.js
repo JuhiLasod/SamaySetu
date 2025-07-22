@@ -11,7 +11,7 @@ const loadProfileController=async(req,res)=>{
         const dpBase64 = user.dp?.data
         ? `data:${user.dp.contentType};base64,${user.dp.data.toString('base64')}`
         : null;
-        return res.json({name: user.name, no: user.no, bio: user.bio, gender: user.gender,myServices: user.myskills, dp: dpBase64});
+        return res.json({name: user.name,balance: user.balance, no: user.no, bio: user.bio, gender: user.gender,myServices: user.myskills, dp: dpBase64});
 
     }
     else{
