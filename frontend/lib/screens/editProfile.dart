@@ -67,7 +67,7 @@ class _editProfileState extends State<editProfile>
   
   File? _profileImage;
   final ImagePicker _picker = ImagePicker(); 
-
+  int balance=0;
   String msg='';
   String name='';
   String bio='';
@@ -92,6 +92,7 @@ void loadContent()async{
   final data=jsonDecode( res.body);
   setState(() {
     // name=data['name'];
+    balance=data['balance'];
     _namec.text=data['name'];
     _selectedGender=data['gender'];
     _bioc.text= data['bio'];
@@ -413,17 +414,67 @@ void loadContent()async{
                   )]
                 ),
                 // width: screenWidth * 0.8,
-                height: screenHeight * 0.25,
+                height: screenHeight * 0.20,
                 child: Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 20),child: Text(' Time . Trust . Together ',style: TextStyle(fontFamily: 'title',fontSize: 35,fontWeight: FontWeight.bold),)),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 8 , 0, 8),child: Text(' Time . Trust . Together ',style: TextStyle(fontFamily: 'title',fontSize: 35,fontWeight: FontWeight.bold),)),
                       Text('Your time and skills matter.To make the most of what SamaySetu has to offer, take a moment to complete your profile.',
                       style: TextStyle(fontFamily: 'basic',fontSize: 20)
                     )],
                   ),
                 ),
+              ),
+            ),
+            if(balance==0)
+            Padding( padding:EdgeInsets.fromLTRB(0, 0, 0, 20),
+              child: Container(
+                width: screenWidth *0.95,
+                height: screenHeight * 0.08,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Color.fromARGB(255, 196, 15, 15),
+                  boxShadow:[ BoxShadow(
+                    color: Colors.black.withAlpha(100), 
+                    spreadRadius: 4,
+                    blurRadius: 10,
+                    offset: Offset(0, 4)
+                  )]
+                ),
+                // color: const Color.fromARGB(255, 178, 13, 1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center , 
+                  crossAxisAlignment: CrossAxisAlignment.center, 
+                  children: [
+                    Text("Balance:${balance.toString()}",style:TextStyle(fontWeight: FontWeight.bold,fontFamily: 'title',fontSize: 35, color: const Color.fromARGB(255, 229, 167, 162))) 
+                  ]
+                )
+              ),
+            )
+            else
+            Padding( padding:EdgeInsets.fromLTRB(0, 0, 0, 20),
+              child: Container(
+                width: screenWidth *0.95,
+                height: screenHeight * 0.08,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Color.fromARGB(255, 14, 203, 49),
+                  boxShadow:[ BoxShadow(
+                    color: Colors.black.withAlpha(100), 
+                    spreadRadius: 4,
+                    blurRadius: 10,
+                    offset: Offset(0, 4)
+                  )]
+                ),
+                // color: const Color.fromARGB(255, 178, 13, 1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center , 
+                  crossAxisAlignment: CrossAxisAlignment.center, 
+                  children: [
+                    Text("Balance:${balance.toString()}",style:TextStyle(fontWeight: FontWeight.bold,fontFamily: 'title',fontSize: 35, color: const Color.fromARGB(255, 229, 167, 162))) 
+                  ]
+                )
               ),
             ),
             Expanded(
