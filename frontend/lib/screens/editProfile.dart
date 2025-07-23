@@ -472,7 +472,7 @@ void loadContent()async{
                   mainAxisAlignment: MainAxisAlignment.center , 
                   crossAxisAlignment: CrossAxisAlignment.center, 
                   children: [
-                    Text("Balance:${balance.toString()}",style:TextStyle(fontWeight: FontWeight.bold,fontFamily: 'title',fontSize: 35, color: const Color.fromARGB(255, 229, 167, 162))) 
+                    Text("Balance:${balance.toString()}",style:TextStyle(fontWeight: FontWeight.bold,fontFamily: 'title',fontSize: 35, color: const Color.fromARGB(255, 17, 72, 19))) 
                   ]
                 )
               ),
