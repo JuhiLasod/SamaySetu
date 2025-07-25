@@ -211,15 +211,73 @@ class _homeState extends State<home>
               color: Colors.black,
               width: screenWidth*1,
               child: Column(children:[ 
-                GestureDetector(onTap: (){},child: CircleAvatar(radius: 65,backgroundColor: Colors.transparent,child: Padding(padding: EdgeInsets.all(5),child: ClipOval(child: Opacity( opacity: 0.7,child: Image.asset("assets/images/logo.png",fit: BoxFit.contain)))))),
-                  Padding(
-                    padding: EdgeInsets.all(50),
-                    child:ElevatedButton(
-                      onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>explore()));},  
-                      child: Text('explore')
-                    )
-                  ),
+                Container(
+                  height: screenHeight*0.4,
+                  child: Stack(clipBehavior: Clip.none,children:[
+                    //  GestureDetector(
+                    //   onTap: (){
+                    //     Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));
+                    //   },
+                    //     child: CircleAvatar(
+                    //       radius: 65,
+                    //       backgroundColor: Colors.transparent,
+                    //       child: Padding(
+                    //         padding: EdgeInsets.all(5),
+                    //         child: ClipOval(
+                    //           child: Opacity( 
+                    //             opacity: 0.7,
+                    //             child: Image.asset("assets/images/logo.png",
+                    //             fit: BoxFit.contain)
+                    //           )
+                    //         )
+                    //       )
+                    //     )
+                    //   ),
+                      Center(
+                        child: Container(
+                          width: screenWidth*0.9,
+                          height: screenHeight * 0.15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            gradient: LinearGradient(colors:[const Color.fromARGB(255, 65, 176, 255), const Color.fromARGB(255, 0, 32, 76)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                          ),
+                          child: GestureDetector(
+                            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>explore()));},  
+                            child: Center(child: Padding(padding: EdgeInsets.fromLTRB(0, screenWidth*0.08, 0, 0),child: Text('Explore Services',style: TextStyle(fontFamily: 'title',fontSize: 40,color: Colors.white),)))
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: screenHeight* 0.07,
+                        left: screenWidth *0.4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.blue,width: 3)
+                          ),
+                          child: GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));
+                          },
                           
+                            child: CircleAvatar(
+                              
+                              radius: screenWidth*0.1,
+                              backgroundColor: Colors.black,
+                              child: Padding(
+                                padding: EdgeInsets.all(6),
+                                child: Opacity( 
+                                  opacity: 0.7,
+                                  child: Image.asset("assets/images/logo.png",
+                                  fit: BoxFit.contain)
+                                )
+                              )
+                            )
+                          ),
+                        ),
+                      ),
+                  ]),
+                ),    
                   Padding( 
                     padding: EdgeInsets.all(50),
                     child: ElevatedButton(
@@ -246,10 +304,10 @@ class _homeState extends State<home>
                     )
                   ),
                           
-                  ElevatedButton(
-                    onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));}, 
-                    child: Text('edit profile')
-                  )
+                  // ElevatedButton(
+                  //   onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));}, 
+                  //   child: Text('edit profile')
+                  // )
               ])
             )
         ]),
