@@ -212,7 +212,7 @@ class _homeState extends State<home>
               width: screenWidth*1,
               child: Column(children:[ 
                 Container(
-                  height: screenHeight*0.4,
+                  height: screenHeight*0.25,
                   child: Stack(clipBehavior: Clip.none,children:[
                     //  GestureDetector(
                     //   onTap: (){
@@ -239,16 +239,16 @@ class _homeState extends State<home>
                           height: screenHeight * 0.15,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            gradient: LinearGradient(colors:[const Color.fromARGB(255, 65, 176, 255), const Color.fromARGB(255, 0, 32, 76)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                            gradient: LinearGradient(colors:[const Color.fromARGB(255, 197, 197, 197), const Color.fromARGB(255, 43, 43, 43)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
                           ),
                           child: GestureDetector(
                             onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>explore()));},  
-                            child: Center(child: Padding(padding: EdgeInsets.fromLTRB(0, screenWidth*0.08, 0, 0),child: Text('Explore Services',style: TextStyle(fontFamily: 'title',fontSize: 40,color: Colors.white),)))
+                            child: Center(child: Padding(padding: EdgeInsets.fromLTRB(0, screenWidth*0.08, 0, 0),child: Text('Explore Services',style: TextStyle(fontFamily: 'title',fontSize: 40,color: Colors.black),)))
                           ),
                         ),
                       ),
                       Positioned(
-                        top: screenHeight* 0.07,
+                        // top: screenHeight* 0.002,
                         left: screenWidth *0.4,
                         child: Container(
                           decoration: BoxDecoration(
@@ -278,36 +278,63 @@ class _homeState extends State<home>
                       ),
                   ]),
                 ),    
+                  
+                Container(
+                  height: screenHeight *0.15,
+                  width: screenWidth * 0.88,
+                  decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            
+                            border: Border.all(color: Colors.blue,width: screenWidth*0.005
+                          ),
+                  ),
+                  // color: Colors.amber,
+                  child: Row( children: [
+                    Padding(padding:EdgeInsets.fromLTRB(screenWidth *0.05, 0, screenWidth *0.02, 0),
+                      child: Center(
+                        child: Container(
+                          // color: Colors.amber,
+                          height: screenHeight * 0.08,
+                          width: screenWidth * 0.375,
+                          decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                gradient: LinearGradient(colors:[const Color.fromARGB(255, 65, 176, 255), const Color.fromARGB(255, 0, 32, 76)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                              ),
+                          child: GestureDetector(
+                            // onPressed: handleMyReq,
+                            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>myRequests()));}, 
+                            child: Center(child: Text('My Requests',style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Colors.white)))
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(padding:EdgeInsets.fromLTRB(screenWidth *0.0, 0, screenWidth *0.0, 0),
+                      child: Container(
+                        // color: Colors.amber,
+                        height: screenHeight * 0.08,
+                        width: screenWidth * 0.375,
+                        decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              gradient: LinearGradient(colors:[const Color.fromARGB(255, 65, 176, 255), const Color.fromARGB(255, 0, 32, 76)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                            ),
+                        child: GestureDetector(
+                          // onPressed: handleMyReq,
+                          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>reqToMe()));}, 
+                          child: Center(child: Text('Requests to me',style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Colors.white)))
+                        ),
+                      ),
+                    ),
+                            
+                    
+                  ]),
+                ),
                   Padding( 
                     padding: EdgeInsets.all(50),
                     child: ElevatedButton(
                       onPressed: handleLogout, 
-                      child: Text('logout')
+                      child: Text('logout ➜]')
                     )
                   ),
-                  
-                  Padding( 
-                    padding: EdgeInsets.all(50),
-                    child: ElevatedButton(
-                      // onPressed: handleMyReq,
-                      onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>myRequests()));}, 
-                      child: Text('My Requests')
-                    )
-                  ),
-                          
-                  Padding( 
-                    padding: EdgeInsets.all(50),
-                    child: ElevatedButton(
-                      // onPressed: handleMyReq,
-                      onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>reqToMe()));}, 
-                      child: Text('Requests to me')
-                    )
-                  ),
-                          
-                  // ElevatedButton(
-                  //   onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>editProfile()));}, 
-                  //   child: Text('edit profile')
-                  // )
               ])
             )
         ]),
