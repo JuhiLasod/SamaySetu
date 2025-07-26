@@ -207,7 +207,7 @@ class _homeState extends State<home>
             ),
             ),
             Container(
-              height: screenHeight * 1,
+              height: screenHeight * 0.6,
               color: Colors.black,
               width: screenWidth*1,
               child: Column(children:[ 
@@ -239,7 +239,7 @@ class _homeState extends State<home>
                           height: screenHeight * 0.15,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            gradient: LinearGradient(colors:[const Color.fromARGB(255, 197, 197, 197), const Color.fromARGB(255, 43, 43, 43)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                            gradient: LinearGradient(colors:[const Color.fromARGB(255, 255, 255, 255), const Color.fromARGB(255, 43, 43, 43)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
                           ),
                           child: GestureDetector(
                             onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>explore()));},  
@@ -328,13 +328,29 @@ class _homeState extends State<home>
                     
                   ]),
                 ),
-                  Padding( 
-                    padding: EdgeInsets.all(50),
-                    child: ElevatedButton(
-                      onPressed: handleLogout, 
-                      child: Text('logout ➜]')
-                    )
-                  ),
+                  // Padding( 
+                  //   padding: EdgeInsets.all(50),
+                  //   child: ElevatedButton(
+                  //     onPressed: handleLogout, 
+                  //     child: Text('logout ➜]')
+                  //   )
+                  // ),
+                  Center(
+                        child: Padding(padding:EdgeInsets.fromLTRB(0, screenHeight*0.05, 0, 0),
+                          child: Container(
+                            width: screenWidth*0.9,
+                            height: screenHeight * 0.07,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                              gradient: LinearGradient(colors:[const Color.fromARGB(255, 255, 255, 255), const Color.fromARGB(255, 43, 43, 43)],begin:Alignment.topCenter, end: Alignment.bottomCenter)
+                            ),
+                            child: GestureDetector(
+                              onTap: (){handleLogout();},  
+                              child: Center(child: Padding(padding: EdgeInsets.fromLTRB(0, screenWidth*0.0, 0, 0),child: Text('Logout ',style: TextStyle(fontFamily: 'basic',fontSize: 20,color: Colors.black),)))
+                            ),
+                          ),
+                        ),
+                      ),
               ])
             )
         ]),
