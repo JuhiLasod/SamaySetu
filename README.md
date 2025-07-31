@@ -2,7 +2,7 @@ SamaySetu is a community-driven Time Banking app where users can offer their tim
 
 Features
 
-- User Authenticatio* – Sign up, log in securely
+- User Authentication – Sign up, log in securely
 - Time Wallet – Store, earn, and spend your time credits
 - Request/Offer Help – Post tasks you need help with or offer services
 - Time Transactions – Log and track exchanged time
@@ -12,8 +12,8 @@ Features
 
 Tech Stack
 
-Frontend	- Flutter
-Backend	- Node.js + Express
-Database	- MongoDB
-Auth	- JWT 
-API Style	- REST APIs
+- Frontend	- Flutter
+- Backend	- Node.js + Express
+- Database	- MongoDB
+- Auth	- JWT 
+- API Style	- REST APIs
