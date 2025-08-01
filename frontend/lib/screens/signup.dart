@@ -48,7 +48,7 @@ class _signupState extends State<signup>
     }
     else{
     try{
-    final res=await http.post(Uri.parse("http://10.0.2.2:8000/api/signup"),
+    final res=await http.post(Uri.parse("https://samaysetu.onrender.com/api/signup"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({'email': email,"pass": pass})
     );

@@ -85,7 +85,7 @@ class _editProfileState extends State<editProfile>
 void loadContent()async{
   final prefs=await SharedPreferences.getInstance();
   final email=await prefs.getString('email');
-  final res= await http.post(Uri.parse("http://10.0.2.2:8000/profile/loadprofile"),
+  final res= await http.post(Uri.parse("https://samaysetu.onrender.com/profile/loadprofile"),
   headers:{'Content-Type':'application/json'},
   body:jsonEncode({'email':email})
   );
@@ -330,7 +330,7 @@ void loadContent()async{
       return;
     }
     else{
-    var uri= Uri.parse('http://10.0.2.2:8000/profile/set-profile');
+    var uri= Uri.parse('https://samaysetu.onrender.com/profile/set-profile');
     var req=http.MultipartRequest('POST',uri);
     req.fields['email']=email !;
    

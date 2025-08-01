@@ -19,7 +19,7 @@ class _myreqState extends State<myRequests>
     final prefs=await SharedPreferences.getInstance();
     final from=await  prefs.getString('email');
     print("sending");
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/my-req'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/req/my-req'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'from':from})
     );
@@ -78,7 +78,7 @@ class _myreqState extends State<myRequests>
     print(datetime);
     print(place);
     print(status);
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/complete'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/req/complete'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({ 'from': email,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
     );
@@ -100,7 +100,7 @@ class _myreqState extends State<myRequests>
     print(datetime);
     print(place);
     print(status);
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/dispute'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/req/dispute'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({ 'from': email,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
     );
