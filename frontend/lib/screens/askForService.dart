@@ -79,7 +79,6 @@ class afsState extends State<askForService>
             dialHandColor: Color.fromARGB(255, 15, 111, 196),
             dialBackgroundColor: Colors.blue.shade50,
 
-            // 👇 AM/PM text colors
             dayPeriodTextColor: MaterialStateColor.resolveWith((states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white; 
@@ -133,7 +132,7 @@ String formattedDateTime = combinedDateTime.toIso8601String();
     // print();
     print(widget.email);
 
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/explore/ask-for-service'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/explore/ask-for-service'),
     headers:{'Content-Type':'application/json'},
     body: jsonEncode({'from': from, 'service': widget.selected ,'to':widget.email, 'datetime':formattedDateTime, 'place': place})
     );

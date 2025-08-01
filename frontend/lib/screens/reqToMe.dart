@@ -29,7 +29,7 @@ class _reqToMeState extends State<reqToMe>
     print(from);
     print("okkkkkayyyyyyyyyyyyyyyyy");
     
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/req/req-to-me'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/req/req-to-me'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'from':from})
     );
@@ -84,7 +84,7 @@ class _reqToMeState extends State<reqToMe>
     print(datetime);
     print(place);
     print(status);
-    final res = await http.post(Uri.parse("http://10.0.2.2:8000/req/set-status"),
+    final res = await http.post(Uri.parse("https://samaysetu.onrender.com/req/set-status"),
       headers: {'Content-Type':'application/json'},
       body: jsonEncode({ 'from': from,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':status})
   );
@@ -111,7 +111,7 @@ class _reqToMeState extends State<reqToMe>
   void handleMAD(int index, String from, String to, String service, String datetime, String place)async
   {
     print("inside handleMAD");
-    final res = await http.post(Uri.parse("http://10.0.2.2:8000/req/set-mad"),
+    final res = await http.post(Uri.parse("https://samaysetu.onrender.com/req/set-mad"),
       headers: {'Content-Type':'application/json'},
       body: jsonEncode({ 'from': from,  'to': to,  'service':service,  'datetime':datetime,  'place':place,  'status':'accept'})
     );

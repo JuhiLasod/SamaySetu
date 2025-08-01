@@ -22,7 +22,7 @@ class _otpState extends State<otp>
       otpSent=false;
     });
     final email=_emailController.text;
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/api/send-otp'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/api/send-otp'),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'email':email})
     );
@@ -49,7 +49,7 @@ class _otpState extends State<otp>
   void handleVerify()async{
     final email=_emailController.text;
     final otp=_otpController.text;
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/api/verify-otp'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/api/verify-otp'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email':email,'otp':otp})
     ); 
@@ -91,7 +91,7 @@ class _otpState extends State<otp>
     }
     else
     {
-    final res=await http.post(Uri.parse('http://10.0.2.2:8000/api/reset-pass'),
+    final res=await http.post(Uri.parse('https://samaysetu.onrender.com/api/reset-pass'),
       headers: {'Content-Type':'application/json'},
       body: jsonEncode({'email':email,'pass': pass})
     );

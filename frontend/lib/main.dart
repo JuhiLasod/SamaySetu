@@ -26,7 +26,7 @@ class SamaySetu extends StatelessWidget {
     try {
       print("inside try");
       final res = await http.post(
-        Uri.parse('http://10.0.2.2:8000/profile/isprofile'),
+        Uri.parse('https://samaysetu.onrender.com/profile/isprofile'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );

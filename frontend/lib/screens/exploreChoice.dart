@@ -22,7 +22,7 @@ class _exploreChoiceState extends State<exploreChoice>
 
       final prefs=await SharedPreferences.getInstance();
       final from=prefs.getString('email');
-    final res= await http.post(Uri.parse("http://10.0.2.2:8000/explore/load-users"),
+    final res= await http.post(Uri.parse("https://samaysetu.onrender.com/explore/load-users"),
       headers:{'Content-Type':'application/json'},
       body:jsonEncode({'selected':widget.selected})
     );
