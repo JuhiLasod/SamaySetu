@@ -7,7 +7,7 @@ import profileRoutes from "./routes/profileRoutes.js";
 import exploreRoutes from "./routes/exploreRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
 
-app.use(cors());
+
 dotenv.config();
 const app=express();
 mongoose .connect(process.env.MONGO_URI)
@@ -15,7 +15,7 @@ mongoose .connect(process.env.MONGO_URI)
 .catch(()=>console.log("error connecting"));
 
 app.use(express.json());
-
+app.use(cors());
 app.use("/api",signupRoutes);
 app.use("/profile",profileRoutes);
 app.use("/explore",exploreRoutes);
